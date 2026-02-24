@@ -17,7 +17,7 @@ const GUEST_TYPE_COLORS = {
 };
 
 /**
- * 生成完整的40个座位数据
+ * 生成完整的200个座位数据
  */
 function generateAllSeats(occupiedSeats) {
   const allSeats = [];
@@ -31,32 +31,37 @@ function generateAllSeats(occupiedSeats) {
   
   // 生成所有座位
   sides.forEach(side => {
-    for (let row = 1; row <= 4; row++) {
-      for (let col = 1; col <= 5; col++) {
-        const seatId = `${side}_${row}_${col}`;
+    // 每侧10个桌子
+    for (let tableNum = 1; tableNum <= 10; tableNum++) {
+      // 每桌10个座位
+      for (let seatNum = 1; seatNum <= 10; seatNum++) {
+        const seatId = `${side}_${tableNum}_${seatNum}`;
         const occupied = occupiedMap[seatId];
+        const isReserveTable = tableNum === 10;
         
         if (occupied) {
           // 已占用的座位
           allSeats.push({
             seatId: seatId,
             side: side,
-            row: row,
-            col: col,
+            tableNum: tableNum,
+            seatNum: seatNum,
             status: 'occupied',
+            isReserveTable: isReserveTable,
             guestType: occupied.guestType,
             guestTypeName: occupied.guestTypeName,
             color: GUEST_TYPE_COLORS[occupied.guestType] || '#cccccc',
             createTime: occupied.createTime
           });
         } else {
-          // 空闲座位
+          // 空闲座位或备用桌
           allSeats.push({
             seatId: seatId,
             side: side,
-            row: row,
-            col: col,
-            status: 'available',
+            tableNum: tableNum,
+            seatNum: seatNum,
+            status: isReserveTable ? 'reserved' : 'available',
+            isReserveTable: isReserveTable,
             guestType: null,
             guestTypeName: null,
             color: null
@@ -74,9 +79,10 @@ function generateAllSeats(occupiedSeats) {
  */
 function calculateStats(occupiedSeats) {
   const stats = {
-    total: 40,
+    total: 200,
     occupied: occupiedSeats.length,
-    available: 40 - occupiedSeats.length,
+    available: 200 - occupiedSeats.length - 20, // 减去备用桌的20个座位
+    reserved: 20, // 备用桌座位数
     byType: {
       classmate: 0,
       father_colleague: 0,
@@ -104,8 +110,8 @@ exports.main = async (event, context) => {
     const result = await db.collection('seats')
       .field({
         seatId: true,
-        row: true,
-        col: true,
+        tableNum: true,
+        seatNum: true,
         side: true,
         guestType: true,
         guestTypeName: true,
@@ -135,9 +141,10 @@ exports.main = async (event, context) => {
       data: {
         seats: [],
         stats: {
-          total: 40,
+          total: 200,
           occupied: 0,
-          available: 40,
+          available: 180,
+          reserved: 20,
           byType: {}
         }
       }

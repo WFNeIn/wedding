@@ -30,17 +30,18 @@ const GUEST_TYPES = [
 /**
  * 生成座位唯一标识
  * @param {string} side - 左侧'left'或右侧'right'
- * @param {number} row - 排号 (1-4)
- * @param {number} col - 列号 (1-5)
+ * @param {number} tableNum - 桌号 (1-10)
+ * @param {number} seatNum - 座位号 (1-10)
  * @returns {string} 座位ID，格式: "left_1_1"
  */
-function getSeatId(side, row, col) {
-  return `${side}_${row}_${col}`;
+function getSeatId(side, tableNum, seatNum) {
+  return `${side}_${tableNum}_${seatNum}`;
 }
 
 /**
  * 生成初始座位数据
- * 生成40个座位（左侧20个，右侧20个）
+ * 生成200个座位（左侧100个，右侧100个）
+ * 20个桌子，每桌10人
  * @returns {Array} 座位数组
  */
 function generateInitialSeats() {
@@ -48,14 +49,20 @@ function generateInitialSeats() {
   const sides = ['left', 'right'];
   
   sides.forEach(side => {
-    for (let row = 1; row <= 4; row++) {
-      for (let col = 1; col <= 5; col++) {
+    // 每侧10个桌子
+    for (let tableNum = 1; tableNum <= 10; tableNum++) {
+      // 每桌10个座位
+      for (let seatNum = 1; seatNum <= 10; seatNum++) {
+        // 桌号10为备用桌
+        const isReserveTable = tableNum === 10;
+        
         seats.push({
-          seatId: getSeatId(side, row, col),
+          seatId: getSeatId(side, tableNum, seatNum),
           side: side,
-          row: row,
-          col: col,
-          status: 'available',  // 'available' | 'occupied'
+          tableNum: tableNum,
+          seatNum: seatNum,
+          status: 'available',  // 'available' | 'occupied' | 'reserved'
+          isReserveTable: isReserveTable,
           guestType: null,
           guestTypeName: null,
           color: null,
@@ -112,19 +119,19 @@ function mergeSeatsData(occupiedSeats) {
 
 /**
  * 验证座位参数
- * @param {number} row - 排号
- * @param {number} col - 列号
+ * @param {number} tableNum - 桌号
+ * @param {number} seatNum - 座位号
  * @param {string} side - 左右侧
  * @param {string} guestType - 宾客类型
  * @returns {Object} 验证结果 {valid: boolean, message: string}
  */
-function validateSeatParams(row, col, side, guestType) {
-  if (!row || row < 1 || row > 4) {
-    return { valid: false, message: '排号必须在1-4之间' };
+function validateSeatParams(tableNum, seatNum, side, guestType) {
+  if (!tableNum || tableNum < 1 || tableNum > 10) {
+    return { valid: false, message: '桌号必须在1-10之间' };
   }
   
-  if (!col || col < 1 || col > 5) {
-    return { valid: false, message: '列号必须在1-5之间' };
+  if (!seatNum || seatNum < 1 || seatNum > 10) {
+    return { valid: false, message: '座位号必须在1-10之间' };
   }
   
   if (side !== 'left' && side !== 'right') {

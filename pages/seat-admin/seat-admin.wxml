@@ -16,6 +16,10 @@
         <view class="stat-value">{{stats.available}}</view>
         <view class="stat-label">空闲</view>
       </view>
+      <view class="stat-item reserved">
+        <view class="stat-value">{{stats.reserved}}</view>
+        <view class="stat-label">备用桌</view>
+      </view>
     </view>
     
     <!-- 各类型统计 -->
@@ -51,14 +55,20 @@
       <!-- 左侧座位 -->
       <view class="seats-side left-side">
         <view class="side-label">左侧区域</view>
-        <view class="seats-grid">
-          <view 
-            wx:for="{{seats}}" 
-            wx:key="seatId"
-            wx:if="{{item.side === 'left'}}"
-            class="seat-item {{item.status}}"
-            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};">
-            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+        <view class="tables-container">
+          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
+            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
+            <view class="seats-in-table">
+              <view 
+                wx:for="{{seats}}" 
+                wx:for-item="seat"
+                wx:key="seatId"
+                wx:if="{{seat.side === 'left' && seat.tableNum === item}}"
+                class="seat-item {{seat.status}}"
+                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};">
+                <text class="seat-label">{{seat.seatNum}}</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -71,14 +81,20 @@
       <!-- 右侧座位 -->
       <view class="seats-side right-side">
         <view class="side-label">右侧区域</view>
-        <view class="seats-grid">
-          <view 
-            wx:for="{{seats}}" 
-            wx:key="seatId"
-            wx:if="{{item.side === 'right'}}"
-            class="seat-item {{item.status}}"
-            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};">
-            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+        <view class="tables-container">
+          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
+            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
+            <view class="seats-in-table">
+              <view 
+                wx:for="{{seats}}" 
+                wx:for-item="seat"
+                wx:key="seatId"
+                wx:if="{{seat.side === 'right' && seat.tableNum === item}}"
+                class="seat-item {{seat.status}}"
+                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};">
+                <text class="seat-label">{{seat.seatNum}}</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>

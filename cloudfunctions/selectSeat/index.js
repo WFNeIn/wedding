@@ -19,13 +19,13 @@ const GUEST_TYPE_MAP = {
 /**
  * 验证参数
  */
-function validateParams(row, col, side, guestType) {
-  if (!row || row < 1 || row > 4) {
-    return { valid: false, message: '排号必须在1-4之间' };
+function validateParams(tableNum, seatNum, side, guestType) {
+  if (!tableNum || tableNum < 1 || tableNum > 10) {
+    return { valid: false, message: '桌号必须在1-10之间' };
   }
   
-  if (!col || col < 1 || col > 5) {
-    return { valid: false, message: '列号必须在1-5之间' };
+  if (!seatNum || seatNum < 1 || seatNum > 10) {
+    return { valid: false, message: '座位号必须在1-10之间' };
   }
   
   if (side !== 'left' && side !== 'right') {
@@ -46,11 +46,11 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const openid = wxContext.OPENID;
   
-  const { row, col, side, guestType } = event;
+  const { tableNum, seatNum, side, guestType } = event;
   
   try {
     // 1. 验证参数
-    const validation = validateParams(row, col, side, guestType);
+    const validation = validateParams(tableNum, seatNum, side, guestType);
     if (!validation.valid) {
       return {
         success: false,
@@ -58,7 +58,15 @@ exports.main = async (event, context) => {
       };
     }
     
-    // 2. 检查用户是否已选座位
+    // 2. 检查是否是备用桌（桌号10）
+    if (tableNum === 10) {
+      return {
+        success: false,
+        message: '该桌为备用桌，暂不开放选座'
+      };
+    }
+    
+    // 3. 检查用户是否已选座位
     const existingSeats = await db.collection('seats')
       .where({
         _openid: openid
@@ -72,20 +80,21 @@ exports.main = async (event, context) => {
       };
     }
     
-    // 3. 构造座位ID
-    const seatId = `${side}_${row}_${col}`;
+    // 4. 构造座位ID
+    const seatId = `${side}_${tableNum}_${seatNum}`;
     const guestTypeName = GUEST_TYPE_MAP[guestType];
     
-    // 4. 尝试插入座位记录（利用唯一索引确保并发安全）
+    // 5. 尝试插入座位记录（利用唯一索引确保并发安全）
     try {
       const result = await db.collection('seats').add({
         data: {
           seatId: seatId,
-          row: row,
-          col: col,
+          tableNum: tableNum,
+          seatNum: seatNum,
           side: side,
           guestType: guestType,
           guestTypeName: guestTypeName,
+          isReserveTable: false,
           createTime: db.serverDate(),
           updateTime: db.serverDate()
         }
@@ -98,8 +107,8 @@ exports.main = async (event, context) => {
           _id: result._id,
           seat: {
             seatId,
-            row,
-            col,
+            tableNum,
+            seatNum,
             side,
             guestType,
             guestTypeName

@@ -29,8 +29,8 @@ exports.main = async (event, context) => {
         success: true,
         data: {
           seatId: seat.seatId,
-          row: seat.row,
-          col: seat.col,
+          tableNum: seat.tableNum,
+          seatNum: seat.seatNum,
           side: seat.side,
           guestType: seat.guestType,
           guestTypeName: seat.guestTypeName,

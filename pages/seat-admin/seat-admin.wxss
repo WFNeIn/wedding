@@ -23,8 +23,9 @@
 }
 
 .stats-grid {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15rpx;
   margin-bottom: 30rpx;
 }
 
@@ -33,7 +34,7 @@
 }
 
 .stat-value {
-  font-size: 48rpx;
+  font-size: 40rpx;
   font-weight: bold;
   color: #87CEEB;
 }
@@ -44,6 +45,10 @@
 
 .stat-item.available .stat-value {
   color: #4ECDC4;
+}
+
+.stat-item.reserved .stat-value {
+  color: #999;
 }
 
 .stat-label {
@@ -113,10 +118,30 @@
   margin-bottom: 15rpx;
 }
 
-.seats-grid {
+.tables-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.table-group {
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 10rpx;
+}
+
+.table-label {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+.seats-in-table {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8rpx;
+  gap: 4rpx;
 }
 
 .seat-item {
@@ -124,12 +149,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12rpx;
-  border: 2rpx solid #e0e0e0;
+  border-radius: 6rpx;
+  border: 1rpx solid #e0e0e0;
+  font-size: 18rpx;
 }
 
 .seat-item.occupied {
   opacity: 1;
+}
+
+.seat-item.reserved {
+  opacity: 0.4;
 }
 
 .seat-label {

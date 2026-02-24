@@ -4,7 +4,7 @@
   <view class="my-seat-info" wx:if="{{mySeat}}">
     <view class="info-title">我的座位</view>
     <view class="info-content">
-      {{mySeat.side === 'left' ? '左侧' : '右侧'}} 第{{mySeat.row}}排 第{{mySeat.col}}列
+      {{mySeat.side === 'left' ? '左侧' : '右侧'}} 第{{mySeat.tableNum}}桌 {{mySeat.seatNum}}号座位
       <text class="guest-type-tag">{{mySeat.guestTypeName}}</text>
     </view>
   </view>
@@ -56,16 +56,22 @@
       <!-- 左侧座位 -->
       <view class="seats-side left-side">
         <view class="side-label">左侧区域</view>
-        <view class="seats-grid">
-          <view 
-            wx:for="{{seats}}" 
-            wx:key="seatId"
-            wx:if="{{item.side === 'left'}}"
-            class="seat-item {{item.status}} {{selectedSeat && selectedSeat.seatId === item.seatId ? 'selected' : ''}}"
-            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};"
-            data-seat="{{item}}"
-            bindtap="onSeatClick">
-            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+        <view class="tables-container">
+          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
+            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
+            <view class="seats-in-table">
+              <view 
+                wx:for="{{seats}}" 
+                wx:for-item="seat"
+                wx:key="seatId"
+                wx:if="{{seat.side === 'left' && seat.tableNum === item}}"
+                class="seat-item {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};"
+                data-seat="{{seat}}"
+                bindtap="onSeatClick">
+                <text class="seat-label">{{seat.seatNum}}</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -78,16 +84,22 @@
       <!-- 右侧座位 -->
       <view class="seats-side right-side">
         <view class="side-label">右侧区域</view>
-        <view class="seats-grid">
-          <view 
-            wx:for="{{seats}}" 
-            wx:key="seatId"
-            wx:if="{{item.side === 'right'}}"
-            class="seat-item {{item.status}} {{selectedSeat && selectedSeat.seatId === item.seatId ? 'selected' : ''}}"
-            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};"
-            data-seat="{{item}}"
-            bindtap="onSeatClick">
-            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+        <view class="tables-container">
+          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
+            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
+            <view class="seats-in-table">
+              <view 
+                wx:for="{{seats}}" 
+                wx:for-item="seat"
+                wx:key="seatId"
+                wx:if="{{seat.side === 'right' && seat.tableNum === item}}"
+                class="seat-item {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};"
+                data-seat="{{seat}}"
+                bindtap="onSeatClick">
+                <text class="seat-label">{{seat.seatNum}}</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>

@@ -121,6 +121,16 @@ Page({
       return;
     }
     
+    // 检查是否是备用桌
+    if (seat.isReserveTable) {
+      wx.showModal({
+        title: '备用桌',
+        content: '该桌为备用桌，暂不开放选座',
+        showCancel: false
+      });
+      return;
+    }
+    
     // 检查座位是否已被占用
     if (seat.status === 'occupied') {
       wx.showModal({
@@ -173,8 +183,8 @@ Page({
       const result = await wx.cloud.callFunction({
         name: 'selectSeat',
         data: {
-          row: selectedSeat.row,
-          col: selectedSeat.col,
+          tableNum: selectedSeat.tableNum,
+          seatNum: selectedSeat.seatNum,
           side: selectedSeat.side,
           guestType: selectedGuestType
         }
@@ -185,7 +195,7 @@ Page({
       if (result.result && result.result.success) {
         wx.showModal({
           title: '选座成功',
-          content: `您已成功选择${selectedSeat.side === 'left' ? '左侧' : '右侧'}第${selectedSeat.row}排第${selectedSeat.col}列座位`,
+          content: `您已成功选择${selectedSeat.side === 'left' ? '左侧' : '右侧'}第${selectedSeat.tableNum}桌${selectedSeat.seatNum}号座位`,
           showCancel: false,
           success: () => {
             // 刷新页面

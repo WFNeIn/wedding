@@ -3,9 +3,10 @@ Page({
   data: {
     seats: [],
     stats: {
-      total: 40,
+      total: 200,
       occupied: 0,
-      available: 40,
+      available: 180,
+      reserved: 20,
       byType: {}
     },
     loading: false
