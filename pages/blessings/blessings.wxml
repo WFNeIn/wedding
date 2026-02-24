@@ -1,0 +1,102 @@
+<!-- 祝福留言板 -->
+<view class="blessings-container" catchtouchmove="preventTouchMove">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">祝福留言</text>
+    <view class="title-divider"></view>
+    <text class="page-desc">留下您的美好祝福</text>
+  </view>
+
+  <!-- 留言列表 -->
+  <scroll-view 
+    class="blessings-list" 
+    scroll-y
+    enable-back-to-top
+    scroll-with-animation
+  >
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{blessingsList.length === 0 && !loading}}">
+      <text class="empty-icon">💬</text>
+      <text class="empty-text">还没有留言，快来抢沙发吧~</text>
+    </view>
+
+    <!-- 留言卡片列表 -->
+    <view class="blessing-item card" wx:for="{{blessingsList}}" wx:key="_id">
+      <view class="blessing-header">
+        <view class="user-avatar">{{item.nickname.charAt(0)}}</view>
+        <view class="user-info">
+          <text class="user-nickname">{{item.nickname}}</text>
+          <text class="blessing-time">{{item.createTimeDisplay}}</text>
+        </view>
+      </view>
+      <view class="blessing-content">
+        {{item.content}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 全屏加载状态 -->
+  <view class="fullscreen-loading" wx:if="{{loading}}">
+    <view class="loading-content">
+      <view class="loading-spinner">
+        <view class="spinner-circle"></view>
+        <view class="spinner-circle"></view>
+        <view class="spinner-circle"></view>
+      </view>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+
+  <!-- 输入区域 -->
+  <view class="input-area">
+    <!-- 快速祝福语选择 -->
+    <view class="quick-blessings" wx:if="{{showQuickBlessings}}">
+      <view class="quick-blessings-header">
+        <text class="quick-title">快速选择</text>
+        <text class="quick-close" bindtap="toggleQuickBlessings">收起</text>
+      </view>
+      <scroll-view class="quick-list" scroll-y>
+        <view 
+          class="quick-item" 
+          wx:for="{{quickBlessingsList}}" 
+          wx:key="index"
+          bindtap="selectQuickBlessing"
+          data-content="{{item}}"
+        >
+          <text class="quick-icon">💝</text>
+          <text class="quick-text">{{item}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="input-box">
+      <textarea 
+        class="input-textarea"
+        placeholder="写下您的祝福..."
+        value="{{inputContent}}"
+        bindinput="onInput"
+        maxlength="500"
+        auto-height
+        show-confirm-bar="{{false}}"
+      />
+      <view class="char-count">{{inputContent.length}}/500</view>
+    </view>
+    
+    <!-- 快速祝福按钮 -->
+    <view class="input-actions">
+      <button 
+        class="quick-btn" 
+        bindtap="toggleQuickBlessings"
+      >
+        {{showQuickBlessings ? '收起' : '快速祝福'}}
+      </button>
+      <button 
+        class="send-btn-large" 
+        bindtap="sendBlessing"
+        disabled="{{submitting || inputContent.length === 0}}"
+      >
+        {{submitting ? '发送中...' : '发送祝福'}}
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,196 @@
+<!-- 首页 - 邀请函 -->
+<view class="index-container">
+  <!-- 开场动画遮罩 -->
+  <view class="opening-animation" wx:if="{{showOpening}}">
+    <!-- 请柬封面 -->
+    <view class="invitation-cover {{openingStep >= 1 ? 'opening' : ''}}">
+      <!-- 左侧封面 -->
+      <view class="cover-left">
+        <view class="cover-content">
+          <text class="cover-title">婚礼邀请函</text>
+          <view class="cover-divider"></view>
+          <text class="cover-names">{{groomName}} & {{brideName}}</text>
+          <text class="cover-date">{{weddingDate}}</text>
+        </view>
+      </view>
+      
+      <!-- 右侧封面 -->
+      <view class="cover-right">
+        <view class="cover-decoration">
+          <text class="decoration-icon">💒</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 淡入的内容 -->
+    <view class="fade-in-content {{openingStep >= 2 ? 'show' : ''}}">
+      <text class="welcome-text">诚挚邀请您</text>
+      <text class="welcome-subtitle">共同见证我们的幸福时刻</text>
+    </view>
+  </view>
+
+  <!-- 轮播图 - 婚纱照 -->
+  <view class="swiper-container {{showOpening ? '' : 'fade-in-page'}}">
+    <swiper 
+      class="photo-swiper" 
+      indicator-dots="{{true}}"
+      indicator-color="rgba(255, 255, 255, 0.5)"
+      indicator-active-color="#87CEEB"
+      autoplay="{{true}}"
+      interval="{{3000}}"
+      duration="{{500}}"
+      circular="{{true}}"
+    >
+      <swiper-item wx:for="{{photos}}" wx:key="index">
+        <image 
+          src="{{item}}" 
+          mode="aspectFill" 
+          class="photo-image"
+          binderror="onImageError"
+        />
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 婚礼信息卡片 -->
+  <view class="info-card card {{showOpening ? '' : 'fade-in-page'}}">
+    <!-- 新人名字 -->
+    <view class="couple-names">
+      <text class="name">{{groomName}}</text>
+      <text class="separator">&</text>
+      <text class="name">{{brideName}}</text>
+    </view>
+
+    <!-- 分隔线 -->
+    <view class="divider"></view>
+
+    <!-- 婚礼日期 -->
+    <view class="info-detail-card">
+      <view class="detail-icon-box date-icon">
+        <text class="detail-icon">📆</text>
+      </view>
+      <view class="detail-content">
+        <text class="detail-label">婚礼日期</text>
+        <text class="detail-value">{{weddingDateDisplay}}</text>
+      </view>
+    </view>
+
+    <!-- 婚宴地点 -->
+    <view class="info-detail-card">
+      <view class="detail-icon-box venue-icon">
+        <text class="detail-icon">💒</text>
+      </view>
+      <view class="detail-content">
+        <text class="detail-label">婚宴地点</text>
+        <text class="detail-value">{{venue}}</text>
+      </view>
+    </view>
+
+    <!-- 详细地址 -->
+    <view class="info-detail-card">
+      <view class="detail-icon-box address-icon">
+        <text class="detail-icon">📍</text>
+      </view>
+      <view class="detail-content">
+        <text class="detail-label">详细地址</text>
+        <text class="detail-value address">{{address}}</text>
+      </view>
+    </view>
+
+    <!-- 倒计时 -->
+    <view class="countdown-container">
+      <view class="countdown-box">
+        <!-- 婚礼前 -->
+        <block wx:if="{{countdownStatus === 'before'}}">
+          <text class="countdown-label">距离婚礼还有</text>
+          <view class="countdown-time-box">
+            <view class="time-item">
+              <text class="time-number">{{countdown.days}}</text>
+              <text class="time-unit">天</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.hours}}</text>
+              <text class="time-unit">时</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.minutes}}</text>
+              <text class="time-unit">分</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.seconds}}</text>
+              <text class="time-unit">秒</text>
+            </view>
+          </view>
+        </block>
+        
+        <!-- 婚礼当天 -->
+        <block wx:elif="{{countdownStatus === 'today'}}">
+          <text class="countdown-label">🎉 婚礼进行中！</text>
+          <view class="countdown-time-box">
+            <view class="time-item special">
+              <text class="time-number">0</text>
+              <text class="time-unit">天</text>
+            </view>
+            <view class="time-item special">
+              <text class="time-number">0</text>
+              <text class="time-unit">时</text>
+            </view>
+            <view class="time-item special">
+              <text class="time-number">0</text>
+              <text class="time-unit">分</text>
+            </view>
+            <view class="time-item special">
+              <text class="time-number">0</text>
+              <text class="time-unit">秒</text>
+            </view>
+          </view>
+        </block>
+        
+        <!-- 婚礼后 -->
+        <block wx:else>
+          <text class="countdown-label">婚礼已举办</text>
+          <view class="countdown-time-box">
+            <view class="time-item">
+              <text class="time-number">{{countdown.days}}</text>
+              <text class="time-unit">天</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.hours}}</text>
+              <text class="time-unit">时</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.minutes}}</text>
+              <text class="time-unit">分</text>
+            </view>
+            <view class="time-item">
+              <text class="time-number">{{countdown.seconds}}</text>
+              <text class="time-unit">秒</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <!-- 抽奖入口 -->
+  <view class="lottery-card card {{showOpening ? '' : 'fade-in-page'}}" bindtap="goToLottery">
+    <view class="lottery-icon-box">
+      <text class="lottery-icon">🎁</text>
+    </view>
+    <view class="lottery-content">
+      <view class="lottery-title">幸运抽奖</view>
+      <view class="lottery-desc">点击查看您的抽奖号码</view>
+    </view>
+    <view class="lottery-arrow">
+      <text class="arrow-icon">›</text>
+    </view>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="tips-card card {{showOpening ? '' : 'fade-in-page'}}">
+    <view class="tips-title">💝 诚挚邀请</view>
+    <view class="tips-content">
+      我们诚挚地邀请您参加我们的婚礼，共同见证这一美好时刻。期待您的到来！
+    </view>
+  </view>
+</view>

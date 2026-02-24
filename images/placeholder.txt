@@ -1,0 +1,49 @@
+# 图标占位说明
+
+由于无法直接生成图片文件，这里提供了图标的获取方法。
+
+## 快速开始（临时方案）
+
+如果你想快速测试项目，可以暂时修改 app.json，使用纯文字导航（不显示图标）：
+
+1. 打开 app.json
+2. 找到 tabBar 配置
+3. 删除所有的 iconPath 和 selectedIconPath 行
+4. 保存文件
+
+修改后的 tabBar 配置示例：
+
+```json
+"tabBar": {
+  "color": "#999999",
+  "selectedColor": "#87CEEB",
+  "backgroundColor": "#ffffff",
+  "borderStyle": "white",
+  "list": [
+    {
+      "pagePath": "pages/index/index",
+      "text": "首页"
+    },
+    {
+      "pagePath": "pages/details/details",
+      "text": "详情"
+    },
+    {
+      "pagePath": "pages/rsvp/rsvp",
+      "text": "回执"
+    },
+    {
+      "pagePath": "pages/blessings/blessings",
+      "text": "祝福"
+    }
+  ]
+}
+```
+
+这样就可以先测试功能，图标可以后续再添加。
+
+## 正式方案
+
+请参考 ICONS_GUIDE.md 文件，按照指南准备8个图标文件。
+
+推荐使用 iconfont.cn 下载图标，简单快捷。

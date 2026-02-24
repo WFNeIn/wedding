@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>婚礼现场抽奖大屏幕</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .title {
+      font-size: 72px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
+    }
+
+    .subtitle {
+      font-size: 32px;
+      margin-bottom: 60px;
+      opacity: 0.9;
+    }
+
+    .number-display {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 80px 60px;
+      margin-bottom: 60px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .number {
+      font-size: 200px;
+      font-weight: 700;
+      letter-spacing: 20px;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      animation: pulse 0.5s ease;
+    }
+
+    .prize-info {
+      font-size: 48px;
+      margin-top: 30px;
+      color: #ffd700;
+      font-weight: 600;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .controls {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 20px 60px;
+      font-size: 28px;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: #fff;
+    }
+
+    .btn-start:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-start:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-prize {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-prize:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .btn-prize.active {
+      background: #ffd700;
+      color: #333;
+      border-color: #ffd700;
+    }
+
+    .winner-list {
+      margin-top: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .winner-list h3 {
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
+
+    .winner-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 24px;
+    }
+
+    .winner-number {
+      font-weight: 700;
+      font-size: 32px;
+      color: #ffd700;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rolling {
+      animation: pulse 0.1s ease infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">🎊 婚礼现场抽奖 🎊</h1>
+    <p class="subtitle">王峰 & 杨丽琴 新婚快乐</p>
+
+    <div class="number-display">
+      <div class="number" id="numberDisplay">000</div>
+      <div class="prize-info" id="prizeInfo"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-prize" id="prize1Btn" onclick="selectPrize(1)">一等奖 (1名)</button>
+      <button class="btn btn-prize" id="prize2Btn" onclick="selectPrize(2)">二等奖 (2名)</button>
+      <button class="btn btn-prize" id="prize3Btn" onclick="selectPrize(3)">三等奖 (3名)</button>
+      <button class="btn btn-start" id="startBtn" onclick="toggleDraw()">开始抽奖</button>
+    </div>
+
+    <div class="winner-list" id="winnerList" style="display: none;">
+      <h3>🏆 中奖名单</h3>
+      <div id="winners"></div>
+    </div>
+  </div>
+
+  <script>
+    let isDrawing = false;
+    let drawInterval = null;
+    let currentPrize = 1;
+    let winners = {
+      1: [],
+      2: [],
+      3: []
+    };
+    const maxWinners = {
+      1: 1,
+      2: 2,
+      3: 3
+    };
+    const prizeNames = {
+      1: '一等奖',
+      2: '二等奖',
+      3: '三等奖'
+    };
+
+    // 选择奖项
+    function selectPrize(prize) {
+      if (isDrawing) return;
+      
+      currentPrize = prize;
+      
+      // 更新按钮状态
+      document.querySelectorAll('.btn-prize').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(`prize${prize}Btn`).classList.add('active');
+      
+      // 更新显示
+      document.getElementById('prizeInfo').textContent = `当前抽取: ${prizeNames[prize]}`;
+    }
+
+    // 开始/停止抽奖
+    function toggleDraw() {
+      if (isDrawing) {
+        stopDraw();
+      } else {
+        startDraw();
+      }
+    }
+
+    // 开始抽奖
+    function startDraw() {
+      // 检查当前奖项是否已抽满
+      if (winners[currentPrize].length >= maxWinners[currentPrize]) {
+        alert(`${prizeNames[currentPrize]}已抽完，请选择其他奖项`);
+        return;
+      }
+
+      isDrawing = true;
+      document.getElementById('startBtn').textContent = '停止';
+      document.getElementById('numberDisplay').classList.add('rolling');
+
+      // 快速滚动号码
+      drawInterval = setInterval(() => {
+        const randomNumber = Math.floor(Math.random() * 200) + 1;
+        const formattedNumber = String(randomNumber).padStart(3, '0');
+        document.getElementById('numberDisplay').textContent = formattedNumber;
+      }, 50);
+    }
+
+    // 停止抽奖
+    function stopDraw() {
+      isDrawing = false;
+      clearInterval(drawInterval);
+      document.getElementById('startBtn').textContent = '开始抽奖';
+      document.getElementById('numberDisplay').classList.remove('rolling');
+
+      // 生成最终号码
+      const finalNumber = Math.floor(Math.random() * 200) + 1;
+      const formattedNumber = String(finalNumber).padStart(3, '0');
+      
+      // 检查是否重复
+      const allWinners = [...winners[1], ...winners[2], ...winners[3]];
+      if (allWinners.includes(formattedNumber)) {
+        alert('该号码已中奖，请重新抽取');
+        return;
+      }
+
+      document.getElementById('numberDisplay').textContent = formattedNumber;
+      
+      // 添加到中奖名单
+      winners[currentPrize].push(formattedNumber);
+      updateWinnerList();
+
+      // 播放中奖动画
+      setTimeout(() => {
+        alert(`🎉 恭喜 ${formattedNumber} 号中${prizeNames[currentPrize]}！`);
+      }, 500);
+    }
+
+    // 更新中奖名单
+    function updateWinnerList() {
+      const winnerListDiv = document.getElementById('winnerList');
+      const winnersDiv = document.getElementById('winners');
+      
+      let html = '';
+      for (let prize in winners) {
+        if (winners[prize].length > 0) {
+          winners[prize].forEach(number => {
+            html += `
+              <div class="winner-item">
+                <span>${prizeNames[prize]}</span>
+                <span class="winner-number">${number}</span>
+              </div>
+            `;
+          });
+        }
+      }
+      
+      winnersDiv.innerHTML = html;
+      winnerListDiv.style.display = html ? 'block' : 'none';
+    }
+
+    // 初始化
+    selectPrize(1);
+  </script>
+</body>
+</html>

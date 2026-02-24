@@ -1,0 +1,9 @@
+{
+  "name": "submitRSVP",
+  "version": "1.0.0",
+  "description": "提交宾客回执云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

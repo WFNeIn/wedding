@@ -1,0 +1,125 @@
+<!-- 详情页 -->
+<view class="details-container">
+  <!-- 背景音乐控制按钮 -->
+  <view class="music-control {{musicPlaying ? 'playing' : ''}}" bindtap="toggleMusic">
+    <view class="music-icon">🎵</view>
+  </view>
+
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">婚礼详情</text>
+    <view class="title-divider"></view>
+  </view>
+
+  <!-- 婚礼流程 -->
+  <view class="section-card card">
+    <view class="section-title">
+      <text class="title-icon">📅</text>
+      <text class="title-text">婚礼流程</text>
+    </view>
+    
+    <view class="timeline-container">
+      <view class="timeline-item" wx:for="{{schedule}}" wx:key="time" wx:for-index="idx">
+        <!-- 时间轴左侧 -->
+        <view class="timeline-left">
+          <view class="timeline-dot {{idx === 0 ? 'first' : ''}} {{idx === schedule.length - 1 ? 'last' : ''}}">
+            <view class="dot-inner"></view>
+          </view>
+          <view class="timeline-line" wx:if="{{idx < schedule.length - 1}}"></view>
+        </view>
+        
+        <!-- 时间轴右侧内容 -->
+        <view class="timeline-right">
+          <view class="timeline-card {{idx === 0 ? 'highlight' : ''}}">
+            <view class="timeline-header-row">
+              <view class="timeline-icon">
+                <text wx:if="{{item.event === '迎宾'}}">👋</text>
+                <text wx:elif="{{item.event === '仪式'}}">💒</text>
+                <text wx:elif="{{item.event === '午宴'}}">🍽️</text>
+                <text wx:else>⏰</text>
+              </view>
+              <view class="timeline-time">{{item.time}}</view>
+            </view>
+            <view class="timeline-event">{{item.event}}</view>
+            <view class="timeline-badge" wx:if="{{idx === 0}}">即将开始</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 交通指引 -->
+  <view class="section-card card">
+    <view class="section-title">
+      <text class="title-icon">📍</text>
+      <text class="title-text">交通指引</text>
+    </view>
+    
+    <!-- 地点信息卡片 -->
+    <view class="venue-card">
+      <view class="venue-header">
+        <view class="venue-icon">🏛️</view>
+        <view class="venue-content">
+          <view class="venue-name">{{venue.name}}</view>
+          <view class="venue-tag">婚宴场地</view>
+        </view>
+      </view>
+      <view class="venue-address-box">
+        <view class="address-icon">📮</view>
+        <text class="venue-address">{{venue.address}}</text>
+      </view>
+    </view>
+
+    <!-- 地图导航按钮 -->
+    <view class="action-btn map-btn" bindtap="openMap">
+      <view class="btn-icon">🗺️</view>
+      <view class="btn-content">
+        <text class="btn-title">打开地图导航</text>
+        <text class="btn-desc">一键获取最佳路线</text>
+      </view>
+      <view class="btn-arrow">
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系方式 -->
+  <view class="section-card card">
+    <view class="section-title">
+      <text class="title-icon">📞</text>
+      <text class="title-text">联系方式</text>
+    </view>
+    
+    <!-- 联系人卡片 -->
+    <view class="contact-card">
+      <view class="contact-header">
+        <view class="contact-avatar">👤</view>
+        <view class="contact-content">
+          <view class="contact-name">{{contact.name}}</view>
+          <view class="contact-role">婚礼联系人</view>
+        </view>
+      </view>
+      <view class="contact-phone-box">
+        <view class="phone-icon">☎️</view>
+        <text class="contact-phone">{{contact.phone}}</text>
+      </view>
+    </view>
+
+    <!-- 拨打电话按钮 -->
+    <view class="action-btn call-btn" bindtap="makePhoneCall">
+      <view class="btn-icon">📱</view>
+      <view class="btn-content">
+        <text class="btn-title">拨打电话</text>
+        <text class="btn-desc">有疑问随时联系我们</text>
+      </view>
+      <view class="btn-arrow">
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="tips-box">
+    <text class="tips-text">💡 如有任何疑问，欢迎随时联系我们</text>
+  </view>
+</view>

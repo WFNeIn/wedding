@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/details/details",
+    "pages/rsvp/rsvp",
+    "pages/blessings/blessings",
+    "pages/lottery/lottery"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#87CEEB",
+    "navigationBarTitleText": "婚礼邀请函",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#87CEEB",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home.png"
+      },
+      {
+        "pagePath": "pages/details/details",
+        "text": "详情",
+        "iconPath": "images/tabbar/details.png",
+        "selectedIconPath": "images/tabbar/details.png"
+      },
+      {
+        "pagePath": "pages/rsvp/rsvp",
+        "text": "回执",
+        "iconPath": "images/tabbar/rsvp.png",
+        "selectedIconPath": "images/tabbar/rsvp.png"
+      },
+      {
+        "pagePath": "pages/blessings/blessings",
+        "text": "祝福",
+        "iconPath": "images/tabbar/blessings.png",
+        "selectedIconPath": "images/tabbar/blessings.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

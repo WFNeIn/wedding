@@ -1,0 +1,7 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "祝福留言",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f0f8ff",
+  "disableSwipeBack": true
+}

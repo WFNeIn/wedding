@@ -1,0 +1,110 @@
+<!-- 回执页 -->
+<view class="rsvp-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">宾客回执</text>
+    <view class="title-divider"></view>
+    <text class="page-desc">请填写您的参会信息</text>
+  </view>
+
+  <!-- 表单卡片 -->
+  <view class="form-card card">
+    <!-- 姓名输入 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-text">姓名</text>
+        <text class="required">*</text>
+      </view>
+      <input 
+        class="form-input" 
+        type="text"
+        placeholder="请输入您的姓名"
+        value="{{formData.name}}"
+        bindinput="onNameInput"
+        maxlength="20"
+      />
+    </view>
+
+    <!-- 电话输入 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-text">联系电话</text>
+        <text class="required">*</text>
+      </view>
+      <input 
+        class="form-input" 
+        type="number"
+        placeholder="请输入您的手机号"
+        value="{{formData.phone}}"
+        bindinput="onPhoneInput"
+        maxlength="11"
+      />
+    </view>
+
+    <!-- 到场人数选择 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-text">到场人数</text>
+        <text class="required">*</text>
+      </view>
+      <picker 
+        class="form-picker" 
+        mode="selector"
+        range="{{attendeesRange}}"
+        value="{{attendeesIndex}}"
+        bindchange="onAttendeesChange"
+      >
+        <view class="picker-value">
+          <text>{{attendeesRange[attendeesIndex]}}</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 是否有儿童 -->
+    <view class="form-item form-item-switch">
+      <view class="form-label">
+        <text class="label-text">是否携带儿童</text>
+      </view>
+      <switch 
+        class="form-switch"
+        checked="{{formData.hasChildren}}"
+        bindchange="onChildrenSwitch"
+        color="#87CEEB"
+      />
+    </view>
+
+    <!-- 饮食禁忌 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-text">饮食禁忌</text>
+        <text class="optional">（选填）</text>
+      </view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="如有特殊饮食要求，请在此说明"
+        value="{{formData.dietaryRestrictions}}"
+        bindinput="onDietaryInput"
+        maxlength="200"
+        auto-height
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn btn-primary" bindtap="submitRSVP">
+      提交回执
+    </button>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="tips-card">
+    <view class="tips-title">📝 温馨提示</view>
+    <view class="tips-item">• 请如实填写参会信息，以便我们做好接待准备</view>
+    <view class="tips-item">• 如有特殊饮食需求，请在备注中说明</view>
+    <view class="tips-item">• 提交后如需修改，请联系新人</view>
+  </view>
+
+  <!-- 隐藏的小彩蛋提示 -->
+  <view class="easter-egg" bindlongpress="showEasterEgg">
+    <text class="easter-egg-text">{{easterEggText}}</text>
+  </view>
+</view>

@@ -1,0 +1,60 @@
+<!-- 我的抽奖号码页面 -->
+<view class="lottery-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">我的抽奖号码</text>
+    <view class="title-divider"></view>
+    <text class="page-desc">请妥善保管您的号码</text>
+  </view>
+
+  <!-- 号码卡片 -->
+  <view class="number-card">
+    <view class="card-header">
+      <text class="card-title">🎁 您的幸运号码</text>
+    </view>
+    
+    <view class="number-display" wx:if="{{lotteryNumber}}">
+      <text class="number-text">{{lotteryNumber}}</text>
+    </view>
+    
+    <view class="loading-state" wx:else>
+      <text class="loading-text">正在分配号码...</text>
+    </view>
+    
+    <view class="card-tips">
+      <text class="tips-text">请记住您的号码，现场抽奖时会用到</text>
+    </view>
+  </view>
+
+  <!-- 中奖状态 -->
+  <view class="prize-card" wx:if="{{prizeInfo}}">
+    <view class="prize-header">
+      <text class="prize-icon">🎉</text>
+      <text class="prize-title">恭喜中奖!</text>
+    </view>
+    <view class="prize-content">
+      <text class="prize-level">{{prizeInfo.prizeName}}</text>
+      <text class="prize-desc">请凭此页面到指定地点领取奖品</text>
+    </view>
+  </view>
+
+  <!-- 未中奖状态 -->
+  <view class="no-prize-card" wx:elif="{{lotteryNumber && !prizeInfo}}">
+    <text class="no-prize-text">暂未中奖，请关注现场抽奖</text>
+  </view>
+
+  <!-- 抽奖说明 -->
+  <view class="info-card">
+    <view class="info-title">
+      <text class="info-icon">ℹ️</text>
+      <text class="info-title-text">抽奖说明</text>
+    </view>
+    <view class="info-content">
+      <text class="info-item">• 一等奖: 1名</text>
+      <text class="info-item">• 二等奖: 2名</text>
+      <text class="info-item">• 三等奖: 3名</text>
+      <text class="info-item">• 抽奖时间: 婚礼现场公布</text>
+      <text class="info-item">• 中奖后请及时领取奖品</text>
+    </view>
+  </view>
+</view>
