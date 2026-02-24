@@ -4,7 +4,9 @@
     "pages/details/details",
     "pages/rsvp/rsvp",
     "pages/blessings/blessings",
-    "pages/lottery/lottery"
+    "pages/lottery/lottery",
+    "pages/seat/seat",
+    "pages/seat-admin/seat-admin"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -42,6 +44,12 @@
         "text": "祝福",
         "iconPath": "images/tabbar/blessings.png",
         "selectedIconPath": "images/tabbar/blessings.png"
+      },
+      {
+        "pagePath": "pages/seat/seat",
+        "text": "选座",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home.png"
       }
     ]
   },

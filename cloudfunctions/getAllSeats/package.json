@@ -1,0 +1,9 @@
+{
+  "name": "getAllSeats",
+  "version": "1.0.0",
+  "description": "获取所有座位信息（管理员）云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

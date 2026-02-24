@@ -1,0 +1,101 @@
+<!--pages/seat/seat.wxml-->
+<view class="seat-container">
+  <!-- 我的座位信息 -->
+  <view class="my-seat-info" wx:if="{{mySeat}}">
+    <view class="info-title">我的座位</view>
+    <view class="info-content">
+      {{mySeat.side === 'left' ? '左侧' : '右侧'}} 第{{mySeat.row}}排 第{{mySeat.col}}列
+      <text class="guest-type-tag">{{mySeat.guestTypeName}}</text>
+    </view>
+  </view>
+
+  <!-- 宾客类型选择 -->
+  <view class="guest-type-selector" wx:if="{{!mySeat}}">
+    <view class="selector-title">请选择您的宾客类型</view>
+    <view class="type-list">
+      <view 
+        class="type-item {{selectedGuestType === 'classmate' ? 'selected' : ''}}"
+        data-type="classmate"
+        bindtap="onTypeSelect">
+        <view class="type-color" style="background-color: #FF6B6B;"></view>
+        <text>同学同事</text>
+      </view>
+      <view 
+        class="type-item {{selectedGuestType === 'father_colleague' ? 'selected' : ''}}"
+        data-type="father_colleague"
+        bindtap="onTypeSelect">
+        <view class="type-color" style="background-color: #4ECDC4;"></view>
+        <text>父亲的同事</text>
+      </view>
+      <view 
+        class="type-item {{selectedGuestType === 'mother_colleague' ? 'selected' : ''}}"
+        data-type="mother_colleague"
+        bindtap="onTypeSelect">
+        <view class="type-color" style="background-color: #FFD93D;"></view>
+        <text>母亲的同事</text>
+      </view>
+      <view 
+        class="type-item {{selectedGuestType === 'parent_friend' ? 'selected' : ''}}"
+        data-type="parent_friend"
+        bindtap="onTypeSelect">
+        <view class="type-color" style="background-color: #95E1D3;"></view>
+        <text>父母的亲友</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 座位布局 -->
+  <view class="layout-container">
+    <!-- 舞台 -->
+    <view class="stage" bindlongpress="onAdminAccess">
+      <text>🎭 舞台 🎭</text>
+    </view>
+
+    <!-- 座位区域 -->
+    <view class="seats-area">
+      <!-- 左侧座位 -->
+      <view class="seats-side left-side">
+        <view class="side-label">左侧区域</view>
+        <view class="seats-grid">
+          <view 
+            wx:for="{{seats}}" 
+            wx:key="seatId"
+            wx:if="{{item.side === 'left'}}"
+            class="seat-item {{item.status}} {{selectedSeat && selectedSeat.seatId === item.seatId ? 'selected' : ''}}"
+            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};"
+            data-seat="{{item}}"
+            bindtap="onSeatClick">
+            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 通道 -->
+      <view class="aisle">
+        <text>通道</text>
+      </view>
+
+      <!-- 右侧座位 -->
+      <view class="seats-side right-side">
+        <view class="side-label">右侧区域</view>
+        <view class="seats-grid">
+          <view 
+            wx:for="{{seats}}" 
+            wx:key="seatId"
+            wx:if="{{item.side === 'right'}}"
+            class="seat-item {{item.status}} {{selectedSeat && selectedSeat.seatId === item.seatId ? 'selected' : ''}}"
+            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};"
+            data-seat="{{item}}"
+            bindtap="onSeatClick">
+            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-container" wx:if="{{!mySeat && selectedSeat}}">
+    <button class="submit-btn" bindtap="onSubmit">确认选座</button>
+  </view>
+</view>

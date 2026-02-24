@@ -1,0 +1,92 @@
+<!--pages/seat-admin/seat-admin.wxml-->
+<view class="admin-container">
+  <!-- 统计信息面板 -->
+  <view class="stats-panel">
+    <view class="panel-title">座位统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <view class="stat-value">{{stats.total}}</view>
+        <view class="stat-label">总座位</view>
+      </view>
+      <view class="stat-item occupied">
+        <view class="stat-value">{{stats.occupied}}</view>
+        <view class="stat-label">已占用</view>
+      </view>
+      <view class="stat-item available">
+        <view class="stat-value">{{stats.available}}</view>
+        <view class="stat-label">空闲</view>
+      </view>
+    </view>
+    
+    <!-- 各类型统计 -->
+    <view class="type-stats">
+      <view class="type-stat-item">
+        <view class="type-color" style="background-color: #FF6B6B;"></view>
+        <text>同学同事: {{stats.byType.classmate || 0}}</text>
+      </view>
+      <view class="type-stat-item">
+        <view class="type-color" style="background-color: #4ECDC4;"></view>
+        <text>父亲的同事: {{stats.byType.father_colleague || 0}}</text>
+      </view>
+      <view class="type-stat-item">
+        <view class="type-color" style="background-color: #FFD93D;"></view>
+        <text>母亲的同事: {{stats.byType.mother_colleague || 0}}</text>
+      </view>
+      <view class="type-stat-item">
+        <view class="type-color" style="background-color: #95E1D3;"></view>
+        <text>父母的亲友: {{stats.byType.parent_friend || 0}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 座位布局 -->
+  <view class="layout-container">
+    <!-- 舞台 -->
+    <view class="stage">
+      <text>🎭 舞台 🎭</text>
+    </view>
+
+    <!-- 座位区域 -->
+    <view class="seats-area">
+      <!-- 左侧座位 -->
+      <view class="seats-side left-side">
+        <view class="side-label">左侧区域</view>
+        <view class="seats-grid">
+          <view 
+            wx:for="{{seats}}" 
+            wx:key="seatId"
+            wx:if="{{item.side === 'left'}}"
+            class="seat-item {{item.status}}"
+            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};">
+            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 通道 -->
+      <view class="aisle">
+        <text>通道</text>
+      </view>
+
+      <!-- 右侧座位 -->
+      <view class="seats-side right-side">
+        <view class="side-label">右侧区域</view>
+        <view class="seats-grid">
+          <view 
+            wx:for="{{seats}}" 
+            wx:key="seatId"
+            wx:if="{{item.side === 'right'}}"
+            class="seat-item {{item.status}}"
+            style="background-color: {{item.guestType ? item.color : '#f0f8ff'}};">
+            <text class="seat-label">{{item.row}}-{{item.col}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 刷新按钮 -->
+  <view class="refresh-btn" bindtap="onRefresh">
+    <text>🔄 刷新数据</text>
+  </view>
+</view>

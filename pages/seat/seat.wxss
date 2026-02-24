@@ -1,0 +1,207 @@
+/* pages/seat/seat.wxss */
+.seat-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #e6f7ff 0%, #ffffff 100%);
+  padding: 20rpx;
+}
+
+/* 我的座位信息 */
+.my-seat-info {
+  background: white;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(135, 206, 235, 0.2);
+}
+
+.info-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #87CEEB;
+  margin-bottom: 15rpx;
+}
+
+.info-content {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.guest-type-tag {
+  display: inline-block;
+  background: #87CEEB;
+  color: white;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  margin-left: 10rpx;
+}
+
+/* 宾客类型选择器 */
+.guest-type-selector {
+  background: white;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(135, 206, 235, 0.2);
+}
+
+.selector-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.type-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15rpx;
+}
+
+.type-item {
+  flex: 0 0 calc(50% - 7.5rpx);
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  transition: all 0.3s;
+}
+
+.type-item.selected {
+  border-color: #87CEEB;
+  background: #f0f8ff;
+  transform: scale(1.05);
+}
+
+.type-color {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  margin-right: 15rpx;
+}
+
+.type-item text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 座位布局 */
+.layout-container {
+  background: white;
+  border-radius: 24rpx;
+  padding: 30rpx 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(135, 206, 235, 0.2);
+}
+
+/* 舞台 */
+.stage {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  margin-bottom: 30rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3);
+}
+
+/* 座位区域 */
+.seats-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.seats-side {
+  flex: 1;
+}
+
+.side-label {
+  text-align: center;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.seats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8rpx;
+}
+
+.seat-item {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  border: 2rpx solid #e0e0e0;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.seat-item.available {
+  cursor: pointer;
+}
+
+.seat-item.available:active {
+  transform: scale(0.95);
+}
+
+.seat-item.occupied {
+  opacity: 0.6;
+}
+
+.seat-item.selected {
+  border: 3rpx solid #87CEEB;
+  box-shadow: 0 0 0 3rpx rgba(135, 206, 235, 0.3);
+  transform: scale(1.1);
+}
+
+.seat-label {
+  font-size: 22rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 通道 */
+.aisle {
+  width: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10rpx;
+}
+
+.aisle text {
+  writing-mode: vertical-rl;
+  font-size: 28rpx;
+  color: #999;
+  letter-spacing: 10rpx;
+}
+
+/* 提交按钮 */
+.submit-container {
+  margin-top: 30rpx;
+  padding: 0 20rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+  color: white;
+  border: none;
+  border-radius: 50rpx;
+  padding: 28rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 20rpx rgba(135, 206, 235, 0.4);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 12rpx rgba(135, 206, 235, 0.3);
+}
