@@ -4,7 +4,7 @@
   <view class="my-seat-info" wx:if="{{mySeat}}">
     <view class="info-title">我的座位</view>
     <view class="info-content">
-      {{mySeat.side === 'left' ? '左侧' : '右侧'}} 第{{mySeat.tableNum}}桌 {{mySeat.seatNum}}号座位
+      第{{mySeat.tableNum}}桌 {{mySeat.seatNum}}号座位
       <text class="guest-type-tag">{{mySeat.guestTypeName}}</text>
     </view>
   </view>
@@ -18,93 +18,179 @@
         data-type="classmate"
         bindtap="onTypeSelect">
         <view class="type-color" style="background-color: #FF6B6B;"></view>
-        <text>同学同事</text>
+        <text>同学 (2桌)</text>
       </view>
       <view 
-        class="type-item {{selectedGuestType === 'father_colleague' ? 'selected' : ''}}"
-        data-type="father_colleague"
+        class="type-item {{selectedGuestType === 'bride_family' ? 'selected' : ''}}"
+        data-type="bride_family"
         bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #4ECDC4;"></view>
-        <text>父亲的同事</text>
+        <view class="type-color" style="background-color: #FFB6C1;"></view>
+        <text>女方亲友 (6桌)</text>
       </view>
       <view 
-        class="type-item {{selectedGuestType === 'mother_colleague' ? 'selected' : ''}}"
-        data-type="mother_colleague"
+        class="type-item {{selectedGuestType === 'groom_family' ? 'selected' : ''}}"
+        data-type="groom_family"
         bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #FFD93D;"></view>
-        <text>母亲的同事</text>
-      </view>
-      <view 
-        class="type-item {{selectedGuestType === 'parent_friend' ? 'selected' : ''}}"
-        data-type="parent_friend"
-        bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #95E1D3;"></view>
-        <text>父母的亲友</text>
+        <view class="type-color" style="background-color: #87CEEB;"></view>
+        <text>男方亲友 (12桌)</text>
       </view>
     </view>
   </view>
 
-  <!-- 座位布局 -->
-  <view class="layout-container">
-    <!-- 舞台 -->
-    <view class="stage" bindlongpress="onAdminAccess">
-      <text>🎭 舞台 🎭</text>
-    </view>
+  <!-- 缩放提示 -->
+  <view class="zoom-hint">
+    <text>💡 双指捏合可缩放，滑动查看更多座位</text>
+  </view>
 
-    <!-- 座位区域 -->
-    <view class="seats-area">
-      <!-- 左侧座位 -->
-      <view class="seats-side left-side">
-        <view class="side-label">左侧区域</view>
-        <view class="tables-container">
-          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
-            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
-            <view class="seats-in-table">
-              <view 
-                wx:for="{{seats}}" 
-                wx:for-item="seat"
-                wx:key="seatId"
-                wx:if="{{seat.side === 'left' && seat.tableNum === item}}"
-                class="seat-item {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};"
-                data-seat="{{seat}}"
-                bindtap="onSeatClick">
-                <text class="seat-label">{{seat.seatNum}}</text>
+  <!-- 可缩放滚动区域 -->
+  <scroll-view 
+    class="scroll-container" 
+    scroll-x="{{true}}" 
+    scroll-y="{{true}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd">
+    
+    <!-- 可缩放的内容区域 -->
+    <view 
+      class="zoomable-content" 
+      style="transform: scale({{scale}}); transform-origin: {{originX}}px {{originY}}px;">
+      
+      <!-- 座位布局 -->
+      <view class="layout-container">
+        <!-- 舞台 -->
+        <view class="stage" bindlongpress="onAdminAccess">
+          <text>🎭 舞台 🎭</text>
+        </view>
+
+        <!-- 座位区域 -->
+        <view class="seats-area">
+          <!-- 左侧座位 (3列5排，15桌) -->
+          <view class="seats-side left-side">
+            <view class="side-label">左侧区域 (3列5排)</view>
+            
+            <!-- 同学区 (1-2桌) -->
+            <view class="area-section classmate-area">
+              <view class="area-label">同学区</view>
+              <view class="tables-grid left-grid">
+                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum <= 2}}" class="table-group">
+                  <view class="table-label">{{item.tableNum}}桌</view>
+                  <view class="round-table-container">
+                    <!-- 圆桌 -->
+                    <view class="round-table">
+                      <text class="table-number">{{item.tableNum}}</text>
+                    </view>
+                    <!-- 座位围绕圆桌 -->
+                    <view 
+                      wx:for="{{item.seats}}" 
+                      wx:for-item="seat"
+                      wx:key="seatId"
+                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
+                      data-seat="{{seat}}"
+                      bindtap="onSeatClick">
+                      <text class="seat-label">{{seat.seatNum}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+
+            <!-- 女方亲友区 (3-8桌) -->
+            <view class="area-section bride-area">
+              <view class="area-label">女方亲友区</view>
+              <view class="tables-grid left-grid">
+                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum >= 3 && item.tableNum <= 8}}" class="table-group">
+                  <view class="table-label">{{item.tableNum}}桌</view>
+                  <view class="round-table-container">
+                    <!-- 圆桌 -->
+                    <view class="round-table">
+                      <text class="table-number">{{item.tableNum}}</text>
+                    </view>
+                    <!-- 座位围绕圆桌 -->
+                    <view 
+                      wx:for="{{item.seats}}" 
+                      wx:for-item="seat"
+                      wx:key="seatId"
+                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
+                      data-seat="{{seat}}"
+                      bindtap="onSeatClick">
+                      <text class="seat-label">{{seat.seatNum}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+
+            <!-- 男方亲友区-左侧部分 (9-15桌) -->
+            <view class="area-section groom-area">
+              <view class="area-label">男方亲友区</view>
+              <view class="tables-grid left-grid">
+                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum >= 9}}" class="table-group">
+                  <view class="table-label">{{item.tableNum}}桌</view>
+                  <view class="round-table-container">
+                    <!-- 圆桌 -->
+                    <view class="round-table">
+                      <text class="table-number">{{item.tableNum}}</text>
+                    </view>
+                    <!-- 座位围绕圆桌 -->
+                    <view 
+                      wx:for="{{item.seats}}" 
+                      wx:for-item="seat"
+                      wx:key="seatId"
+                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
+                      data-seat="{{seat}}"
+                      bindtap="onSeatClick">
+                      <text class="seat-label">{{seat.seatNum}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 通道 -->
+          <view class="aisle">
+            <text>通道</text>
+          </view>
+
+          <!-- 右侧座位 (2列3排，6桌) -->
+          <view class="seats-side right-side">
+            <view class="side-label">右侧区域 (2列3排)</view>
+            
+            <!-- 男方亲友区-右侧部分 (16-21桌) -->
+            <view class="area-section groom-area">
+              <view class="area-label">男方亲友区（续）</view>
+              <view class="tables-grid right-grid">
+                <view wx:for="{{rightTables}}" wx:key="tableNum" class="table-group">
+                  <view class="table-label">{{item.tableNum}}桌{{item.tableNum === 21 ? '(备用)' : ''}}</view>
+                  <view class="round-table-container">
+                    <!-- 圆桌 -->
+                    <view class="round-table {{item.tableNum === 21 ? 'reserve-table' : ''}}">
+                      <text class="table-number">{{item.tableNum}}</text>
+                    </view>
+                    <!-- 座位围绕圆桌 -->
+                    <view 
+                      wx:for="{{item.seats}}" 
+                      wx:for-item="seat"
+                      wx:key="seatId"
+                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
+                      style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : seat.areaColor)}}; opacity: {{seat.guestType ? 0.6 : (seat.isReserveTable ? 0.4 : 0.3)}};"
+                      data-seat="{{seat}}"
+                      bindtap="onSeatClick">
+                      <text class="seat-label">{{seat.seatNum}}</text>
+                    </view>
+                  </view>
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
-
-      <!-- 通道 -->
-      <view class="aisle">
-        <text>通道</text>
-      </view>
-
-      <!-- 右侧座位 -->
-      <view class="seats-side right-side">
-        <view class="side-label">右侧区域</view>
-        <view class="tables-container">
-          <view wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" class="table-group">
-            <view class="table-label">{{item}}桌{{item === 10 ? '(备用)' : ''}}</view>
-            <view class="seats-in-table">
-              <view 
-                wx:for="{{seats}}" 
-                wx:for-item="seat"
-                wx:key="seatId"
-                wx:if="{{seat.side === 'right' && seat.tableNum === item}}"
-                class="seat-item {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : '#f0f8ff')}};"
-                data-seat="{{seat}}"
-                bindtap="onSeatClick">
-                <text class="seat-label">{{seat.seatNum}}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
     </view>
-  </view>
+  </scroll-view>
 
   <!-- 提交按钮 -->
   <view class="submit-container" wx:if="{{!mySeat && selectedSeat}}">

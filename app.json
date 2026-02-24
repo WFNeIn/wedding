@@ -48,8 +48,8 @@
       {
         "pagePath": "pages/seat/seat",
         "text": "选座",
-        "iconPath": "images/tabbar/home.png",
-        "selectedIconPath": "images/tabbar/home.png"
+        "iconPath": "images/tabbar/seat.png",
+        "selectedIconPath": "images/tabbar/seat.png"
       }
     ]
   },

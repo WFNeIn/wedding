@@ -7,23 +7,21 @@
 const GUEST_TYPES = [
   { 
     id: 'classmate', 
-    name: '同学同事', 
-    color: '#FF6B6B' 
+    name: '同学', 
+    color: '#FF6B6B',
+    tableCount: 2  // 2桌
   },
   { 
-    id: 'father_colleague', 
-    name: '父亲的同事', 
-    color: '#4ECDC4' 
+    id: 'bride_family', 
+    name: '女方亲友', 
+    color: '#FFB6C1',
+    tableCount: 6  // 6桌
   },
   { 
-    id: 'mother_colleague', 
-    name: '母亲的同事', 
-    color: '#FFD93D' 
-  },
-  { 
-    id: 'parent_friend', 
-    name: '父母的亲友', 
-    color: '#95E1D3' 
+    id: 'groom_family', 
+    name: '男方亲友', 
+    color: '#87CEEB',
+    tableCount: 12  // 12桌
   }
 ];
 
@@ -40,37 +38,86 @@ function getSeatId(side, tableNum, seatNum) {
 
 /**
  * 生成初始座位数据
- * 生成200个座位（左侧100个，右侧100个）
- * 20个桌子，每桌10人
+ * 左侧：3列5排 = 15桌（150座位）
+ * 右侧：2列3排 = 6桌（60座位）
+ * 总计：21桌，210座位
+ * 
+ * 区域划分：
+ * - 左侧前2桌（1-2桌）：同学区
+ * - 左侧中6桌（3-8桌）：女方亲友区
+ * - 左侧后7桌 + 右侧6桌（9-21桌）：男方亲友区
+ * - 21号桌为备用桌
+ * 
  * @returns {Array} 座位数组
  */
 function generateInitialSeats() {
   const seats = [];
-  const sides = ['left', 'right'];
   
-  sides.forEach(side => {
-    // 每侧10个桌子
-    for (let tableNum = 1; tableNum <= 10; tableNum++) {
-      // 每桌10个座位
-      for (let seatNum = 1; seatNum <= 10; seatNum++) {
-        // 桌号10为备用桌
-        const isReserveTable = tableNum === 10;
-        
-        seats.push({
-          seatId: getSeatId(side, tableNum, seatNum),
-          side: side,
-          tableNum: tableNum,
-          seatNum: seatNum,
-          status: 'available',  // 'available' | 'occupied' | 'reserved'
-          isReserveTable: isReserveTable,
-          guestType: null,
-          guestTypeName: null,
-          color: null,
-          openid: null
-        });
-      }
+  // 左侧：15个桌子（3列5排）
+  // 桌号分配：
+  // 1-2桌：同学（前2桌）
+  // 3-8桌：女方亲友（中6桌）
+  // 9-15桌：男方亲友（后7桌）
+  for (let tableNum = 1; tableNum <= 15; tableNum++) {
+    // 确定宾客类型
+    let guestType, guestTypeName, areaColor;
+    if (tableNum <= 2) {
+      guestType = 'classmate';
+      guestTypeName = '同学区';
+      areaColor = '#FF6B6B';
+    } else if (tableNum <= 8) {
+      guestType = 'bride_family';
+      guestTypeName = '女方亲友区';
+      areaColor = '#FFB6C1';
+    } else {
+      guestType = 'groom_family';
+      guestTypeName = '男方亲友区';
+      areaColor = '#87CEEB';
     }
-  });
+    
+    for (let seatNum = 1; seatNum <= 10; seatNum++) {
+      seats.push({
+        seatId: getSeatId('left', tableNum, seatNum),
+        side: 'left',
+        tableNum: tableNum,
+        seatNum: seatNum,
+        status: 'available',
+        isReserveTable: false,
+        guestType: null,
+        guestTypeName: null,
+        color: null,
+        openid: null,
+        areaType: guestType,
+        areaName: guestTypeName,
+        areaColor: areaColor
+      });
+    }
+  }
+  
+  // 右侧：6个桌子（2列3排）
+  // 桌号分配：16-21桌，全部为男方亲友区
+  // 21号桌为备用桌
+  for (let tableNum = 16; tableNum <= 21; tableNum++) {
+    const isReserveTable = tableNum === 21;
+    
+    for (let seatNum = 1; seatNum <= 10; seatNum++) {
+      seats.push({
+        seatId: getSeatId('right', tableNum, seatNum),
+        side: 'right',
+        tableNum: tableNum,
+        seatNum: seatNum,
+        status: 'available',
+        isReserveTable: isReserveTable,
+        guestType: null,
+        guestTypeName: null,
+        color: null,
+        openid: null,
+        areaType: 'groom_family',
+        areaName: '男方亲友区',
+        areaColor: '#87CEEB'
+      });
+    }
+  }
   
   return seats;
 }
@@ -126,16 +173,21 @@ function mergeSeatsData(occupiedSeats) {
  * @returns {Object} 验证结果 {valid: boolean, message: string}
  */
 function validateSeatParams(tableNum, seatNum, side, guestType) {
-  if (!tableNum || tableNum < 1 || tableNum > 10) {
-    return { valid: false, message: '桌号必须在1-10之间' };
+  // 左侧15桌（1-15），右侧6桌（16-21）
+  if (side === 'left') {
+    if (!tableNum || tableNum < 1 || tableNum > 15) {
+      return { valid: false, message: '左侧桌号必须在1-15之间' };
+    }
+  } else if (side === 'right') {
+    if (!tableNum || tableNum < 16 || tableNum > 21) {
+      return { valid: false, message: '右侧桌号必须在16-21之间' };
+    }
+  } else {
+    return { valid: false, message: '座位位置必须是left或right' };
   }
   
   if (!seatNum || seatNum < 1 || seatNum > 10) {
     return { valid: false, message: '座位号必须在1-10之间' };
-  }
-  
-  if (side !== 'left' && side !== 'right') {
-    return { valid: false, message: '座位位置必须是left或right' };
   }
   
   const typeInfo = getGuestTypeInfo(guestType);

@@ -10,30 +10,69 @@ const db = cloud.database();
 
 // 宾客类型映射
 const GUEST_TYPE_MAP = {
-  'classmate': '同学同事',
-  'father_colleague': '父亲的同事',
-  'mother_colleague': '母亲的同事',
-  'parent_friend': '父母的亲友'
+  'classmate': '同学',
+  'bride_family': '女方亲友',
+  'groom_family': '男方亲友'
 };
+
+/**
+ * 获取座位的区域类型
+ */
+function getSeatAreaType(tableNum) {
+  if (tableNum <= 2) {
+    return 'classmate';
+  } else if (tableNum <= 8) {
+    return 'bride_family';
+  } else {
+    return 'groom_family';
+  }
+}
 
 /**
  * 验证参数
  */
 function validateParams(tableNum, seatNum, side, guestType) {
-  if (!tableNum || tableNum < 1 || tableNum > 10) {
-    return { valid: false, message: '桌号必须在1-10之间' };
+  // 左侧15桌（1-15），右侧6桌（16-21）
+  if (side === 'left') {
+    if (!tableNum || tableNum < 1 || tableNum > 15) {
+      return { valid: false, message: '左侧桌号必须在1-15之间' };
+    }
+  } else if (side === 'right') {
+    if (!tableNum || tableNum < 16 || tableNum > 21) {
+      return { valid: false, message: '右侧桌号必须在16-21之间' };
+    }
+  } else {
+    return { valid: false, message: '座位位置必须是left或right' };
   }
   
   if (!seatNum || seatNum < 1 || seatNum > 10) {
     return { valid: false, message: '座位号必须在1-10之间' };
   }
   
-  if (side !== 'left' && side !== 'right') {
-    return { valid: false, message: '座位位置必须是left或right' };
-  }
-  
   if (!GUEST_TYPE_MAP[guestType]) {
     return { valid: false, message: '无效的宾客类型' };
+  }
+  
+  return { valid: true };
+}
+
+/**
+ * 验证区域限制
+ */
+function validateAreaRestriction(tableNum, guestType) {
+  const seatAreaType = getSeatAreaType(tableNum);
+  
+  if (seatAreaType !== guestType) {
+    const areaNames = {
+      'classmate': '同学区（1-2桌）',
+      'bride_family': '女方亲友区（3-8桌）',
+      'groom_family': '男方亲友区（9-21桌）'
+    };
+    
+    return {
+      valid: false,
+      message: `您选择的是"${GUEST_TYPE_MAP[guestType]}"类型，只能在${areaNames[guestType]}选座`
+    };
   }
   
   return { valid: true };
@@ -58,15 +97,24 @@ exports.main = async (event, context) => {
       };
     }
     
-    // 2. 检查是否是备用桌（桌号10）
-    if (tableNum === 10) {
+    // 2. 检查是否是备用桌（21号桌）
+    if (tableNum === 21) {
       return {
         success: false,
         message: '该桌为备用桌，暂不开放选座'
       };
     }
     
-    // 3. 检查用户是否已选座位
+    // 3. 验证区域限制
+    const areaValidation = validateAreaRestriction(tableNum, guestType);
+    if (!areaValidation.valid) {
+      return {
+        success: false,
+        message: areaValidation.message
+      };
+    }
+    
+    // 4. 检查用户是否已选座位
     const existingSeats = await db.collection('seats')
       .where({
         _openid: openid
@@ -80,11 +128,11 @@ exports.main = async (event, context) => {
       };
     }
     
-    // 4. 构造座位ID
+    // 5. 构造座位ID
     const seatId = `${side}_${tableNum}_${seatNum}`;
     const guestTypeName = GUEST_TYPE_MAP[guestType];
     
-    // 5. 尝试插入座位记录（利用唯一索引确保并发安全）
+    // 6. 尝试插入座位记录（利用唯一索引确保并发安全）
     try {
       const result = await db.collection('seats').add({
         data: {
