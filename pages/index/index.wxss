@@ -107,7 +107,7 @@
 /* 请柬信封容器 */
 .invitation-envelope {
   width: 650rpx;
-  height: 900rpx;
+  height: 420rpx;
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -121,15 +121,16 @@
 .envelope-body {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ffffff 0%, #fffaf0 100%);
+  background: linear-gradient(135deg, #fffef9 0%, #fefcf3 100%);
   border-radius: 32rpx;
   box-shadow: 
     0 40rpx 100rpx rgba(0, 0, 0, 0.4),
     0 20rpx 50rpx rgba(139, 0, 0, 0.3),
-    0 0 0 1rpx rgba(255, 215, 0, 0.2);
+    inset 0 0 100rpx rgba(212, 175, 55, 0.08);
   position: relative;
   overflow: hidden;
   transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 3rpx solid rgba(212, 175, 55, 0.3);
 }
 
 .invitation-envelope.opening .envelope-body {
@@ -137,64 +138,179 @@
   opacity: 0.3;
 }
 
-/* 信封装饰纹路 */
-.envelope-pattern {
+/* 信封三角翻盖 */
+.envelope-flap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  opacity: 0.04;
-  background: 
-    repeating-linear-gradient(45deg, transparent, transparent 35rpx, #d4af37 35rpx, #d4af37 37rpx),
-    repeating-linear-gradient(-45deg, transparent, transparent 35rpx, #d4af37 35rpx, #d4af37 37rpx);
+  height: 0;
+  z-index: 5;
+  pointer-events: none;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.pattern-line {
-  display: none;
-}
-
-/* 信封上的新人名字 */
-.envelope-names {
+.flap-triangle {
+  width: 0;
+  height: 0;
+  border-left: 325rpx solid transparent;
+  border-right: 325rpx solid transparent;
+  border-top: 180rpx solid #e8d4b8;
   position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  filter: drop-shadow(0 8rpx 20rpx rgba(0, 0, 0, 0.3));
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.name-text {
-  display: block;
+/* 翻盖打开状态 */
+.envelope-flap.open .flap-triangle {
+  transform: translateY(-180rpx) rotateX(180deg);
+  opacity: 0;
+}
+
+/* 信封内容区域 */
+.envelope-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60rpx 80rpx 50rpx;
+  position: relative;
+  z-index: 2;
+}
+
+/* 顶部装饰线 */
+.envelope-decoration-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 20rpx;
+}
+
+.decoration-line {
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.5), transparent);
+}
+
+.decoration-pattern {
+  font-size: 24rpx;
+  color: rgba(212, 175, 55, 0.8);
+}
+
+/* 中央主要内容 */
+.envelope-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 24rpx;
+}
+
+/* 婚礼标题 */
+.envelope-title {
+  text-align: center;
+}
+
+.title-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #8B4513;
+  letter-spacing: 8rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+  opacity: 0.85;
+}
+
+/* 新人名字 */
+.envelope-couple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.couple-name-large {
   font-size: 56rpx;
   font-weight: 700;
   background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 12rpx;
-  margin-bottom: 30rpx;
-  font-family: "KaiTi", "STKaiti", "PingFang SC", serif;
+  letter-spacing: 8rpx;
+  font-family: "KaiTi", "STKaiti", serif;
   filter: drop-shadow(0 2rpx 8rpx rgba(212, 175, 55, 0.4));
 }
 
-.date-text {
-  display: block;
-  font-size: 28rpx;
-  color: #8B4513;
-  letter-spacing: 4rpx;
+.couple-separator-large {
+  font-size: 36rpx;
+  font-weight: 300;
+  color: #d4af37;
+  opacity: 0.8;
+}
+
+/* 日期信息 */
+.envelope-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.date-label {
+  font-size: 22rpx;
+  color: #A0522D;
+  letter-spacing: 2rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+  opacity: 0.8;
+}
+
+.date-value {
+  font-size: 26rpx;
   font-weight: 500;
-  opacity: 0.9;
+  color: #8B4513;
+  letter-spacing: 2rpx;
   font-family: "KaiTi", "STKaiti", serif;
 }
 
-/* 印章封条容器 */
+/* 底部装饰线 */
+.envelope-decoration-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 20rpx;
+}
+
+/* 移除旧样式 */
+.envelope-texture,
+.envelope-border-decoration,
+.envelope-fold-lines,
+.fold-line,
+.envelope-stamp,
+.stamp-inner,
+.stamp-text,
+.envelope-address-area,
+.address-line,
+.address-label,
+.address-text,
+.envelope-names,
+.name-text,
+.date-text {
+  display: none;
+}
+
+/* 印章封条容器（在三角翻盖上） */
 .seal-wrapper {
   position: absolute;
-  top: 65%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 6;
   transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -220,8 +336,8 @@
 /* 中式印章 */
 /* 中式印章 */
 .seal-stamp {
-  width: 220rpx;
-  height: 220rpx;
+  width: 160rpx;
+  height: 160rpx;
   position: relative;
   animation: sealFloat 3s ease-in-out infinite;
   filter: drop-shadow(0 4rpx 16rpx rgba(212, 175, 55, 0.6));
@@ -245,10 +361,10 @@
   align-items: center;
   justify-content: center;
   box-shadow: 
-    inset 0 0 0 8rpx rgba(139, 0, 0, 0.2),
-    inset 0 0 0 16rpx #d4af37,
-    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
-    0 0 40rpx rgba(212, 175, 55, 0.8);
+    inset 0 0 0 6rpx rgba(139, 0, 0, 0.2),
+    inset 0 0 0 12rpx #d4af37,
+    inset 0 4rpx 10rpx rgba(0, 0, 0, 0.15),
+    0 0 30rpx rgba(212, 175, 55, 0.8);
   position: relative;
   opacity: 0.98;
 }
@@ -261,7 +377,7 @@
   transform: translate(-50%, -50%);
   width: 88%;
   height: 88%;
-  border: 3rpx solid rgba(139, 0, 0, 0.3);
+  border: 2rpx solid rgba(139, 0, 0, 0.3);
   border-radius: 50%;
 }
 
@@ -289,16 +405,16 @@
 }
 
 .seal-text-top {
-  font-size: 80rpx;
+  font-size: 60rpx;
   font-weight: 700;
   line-height: 1;
-  margin-bottom: 8rpx;
+  margin-bottom: 6rpx;
 }
 
 .seal-text-bottom {
-  font-size: 32rpx;
+  font-size: 24rpx;
   font-weight: 600;
-  letter-spacing: 8rpx;
+  letter-spacing: 6rpx;
 }
 
 /* 点击提示 */
