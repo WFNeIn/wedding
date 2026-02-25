@@ -218,5 +218,95 @@ Page({
    */
   onUnload() {
     this.stopCountdown();
+  },
+
+  /**
+   * 打开墨迹天气小程序（半屏模式）
+   */
+  openMojiWeather() {
+    const weddingInfo = app.globalData.weddingInfo;
+    
+    // 解析婚礼日期
+    const dateObj = new Date(weddingInfo.date);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDate = `${year}${month}${day}`; // 格式：20250504
+    
+    // 获取婚礼地点的城市信息（武汉）
+    const city = '武汉';
+    
+    // 显示加载提示
+    wx.showLoading({
+      title: '正在打开...',
+      mask: true
+    });
+    
+    // 使用半屏打开API
+    wx.openEmbeddedMiniProgram({
+      appId: 'wxb4ba3c02aa476ea1', // 墨迹天气小程序AppID
+      path: 'pages/index/index',
+      envVersion: 'release',
+      extraData: {
+        city: city,
+        date: formattedDate
+      },
+      success: (res) => {
+        wx.hideLoading();
+        console.log('成功以半屏模式打开墨迹天气', res);
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('半屏打开失败，尝试全屏打开', err);
+        
+        // 半屏打开失败，尝试全屏打开
+        wx.navigateToMiniProgram({
+          appId: 'wxb4ba3c02aa476ea1',
+          path: 'pages/index/index',
+          envVersion: 'release',
+          extraData: {
+            city: city,
+            date: formattedDate
+          },
+          success: (res) => {
+            console.log('成功以全屏模式打开墨迹天气', res);
+          },
+          fail: (err2) => {
+            console.error('全屏打开也失败', err2);
+            
+            let errorMsg = '无法打开墨迹天气小程序';
+            
+            if (err2.errMsg.includes('cancel')) {
+              return;
+            } else if (err2.errMsg.includes('appId')) {
+              errorMsg = '墨迹天气小程序配置错误';
+            } else if (err2.errMsg.includes('permission')) {
+              errorMsg = '没有权限打开墨迹天气';
+            }
+            
+            wx.showModal({
+              title: '温馨提示',
+              content: errorMsg + '\n\n您可以手动搜索"墨迹天气"小程序查看' + weddingInfo.date + '武汉的天气',
+              showCancel: true,
+              cancelText: '知道了',
+              confirmText: '复制日期',
+              success: (modalRes) => {
+                if (modalRes.confirm) {
+                  wx.setClipboardData({
+                    data: weddingInfo.date + ' 武汉',
+                    success: () => {
+                      wx.showToast({
+                        title: '已复制日期',
+                        icon: 'success'
+                      });
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+      }
+    });
   }
 });

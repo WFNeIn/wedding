@@ -11,7 +11,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#87CEEB",
-    "navigationBarTitleText": "婚礼邀请函",
+    "navigationBarTitleText": "峰琴喜事",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#f8f8f8"
   },
@@ -53,6 +53,9 @@
       }
     ]
   },
+  "navigateToMiniProgramAppIdList": [
+    "wxb4ba3c02aa476ea1"
+  ],
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"

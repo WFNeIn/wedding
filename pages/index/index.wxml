@@ -65,13 +65,17 @@
     <view class="divider"></view>
 
     <!-- 婚礼日期 -->
-    <view class="info-detail-card">
+    <view class="info-detail-card" bindtap="openMojiWeather">
       <view class="detail-icon-box date-icon">
         <text class="detail-icon">📆</text>
       </view>
       <view class="detail-content">
         <text class="detail-label">婚礼日期</text>
         <text class="detail-value">{{weddingDateDisplay}}</text>
+        <text class="detail-hint">点击查看当日天气</text>
+      </view>
+      <view class="detail-arrow">
+        <text class="arrow-icon">›</text>
       </view>
     </view>
 

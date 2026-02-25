@@ -358,6 +358,30 @@
   line-height: 1.6;
 }
 
+.detail-hint {
+  font-size: 22rpx;
+  color: #87CEEB;
+  margin-top: 4rpx;
+  opacity: 0.8;
+}
+
+.detail-arrow {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 10rpx;
+}
+
+.detail-arrow .arrow-icon {
+  font-size: 36rpx;
+  color: #87CEEB;
+  font-weight: 700;
+  line-height: 1;
+}
+
 /* 旧样式保留（兼容） */
 .info-item {
   display: flex;
