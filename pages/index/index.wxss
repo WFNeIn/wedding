@@ -766,6 +766,13 @@
   line-height: 1.6;
 }
 
+.detail-address {
+  font-size: 24rpx;
+  color: #999;
+  line-height: 1.6;
+  margin-top: 8rpx;
+}
+
 .detail-hint {
   font-size: 22rpx;
   color: #87CEEB;

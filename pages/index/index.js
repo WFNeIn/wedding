@@ -224,6 +224,15 @@ Page({
   },
 
   /**
+   * 跳转到详情页面
+   */
+  goToDetails() {
+    wx.navigateTo({
+      url: '/pages/details/details'
+    });
+  },
+
+  /**
    * 跳转到抽奖页面
    */
   goToLottery() {

@@ -28,12 +28,6 @@
         "selectedIconPath": "images/tabbar/home.png"
       },
       {
-        "pagePath": "pages/details/details",
-        "text": "详情",
-        "iconPath": "images/tabbar/details.png",
-        "selectedIconPath": "images/tabbar/details.png"
-      },
-      {
         "pagePath": "pages/rsvp/rsvp",
         "text": "回执",
         "iconPath": "images/tabbar/rsvp.png",
@@ -47,7 +41,7 @@
       },
       {
         "pagePath": "pages/seat/seat",
-        "text": "选座",
+        "text": "座位安排",
         "iconPath": "images/tabbar/seat.png",
         "selectedIconPath": "images/tabbar/seat.png"
       }

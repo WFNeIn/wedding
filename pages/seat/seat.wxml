@@ -192,6 +192,61 @@
     </view>
   </scroll-view>
 
+  <!-- 小地图 -->
+  <view class="minimap-container">
+    <view class="minimap-title">座位布局</view>
+    <view class="minimap-content">
+      <!-- 舞台 -->
+      <view class="minimap-stage"></view>
+      
+      <!-- 座位区域 -->
+      <view class="minimap-seats">
+        <!-- 左侧区域 -->
+        <view class="minimap-side minimap-left">
+          <!-- 同学区 (1-2桌) -->
+          <view class="minimap-area classmate">
+            <view class="minimap-table" wx:for="{{2}}" wx:key="*this"></view>
+          </view>
+          <!-- 女方亲友区 (3-8桌) -->
+          <view class="minimap-area bride">
+            <view class="minimap-table" wx:for="{{6}}" wx:key="*this"></view>
+          </view>
+          <!-- 男方亲友区左侧 (9-15桌) -->
+          <view class="minimap-area groom">
+            <view class="minimap-table" wx:for="{{7}}" wx:key="*this"></view>
+          </view>
+        </view>
+        
+        <!-- 通道 -->
+        <view class="minimap-aisle"></view>
+        
+        <!-- 右侧区域 -->
+        <view class="minimap-side minimap-right">
+          <!-- 男方亲友区右侧 (16-21桌) -->
+          <view class="minimap-area groom">
+            <view class="minimap-table" wx:for="{{6}}" wx:key="*this"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 图例 -->
+    <view class="minimap-legend">
+      <view class="legend-item">
+        <view class="legend-color" style="background-color: #FF6B6B;"></view>
+        <text>同学</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color" style="background-color: #FFB6C1;"></view>
+        <text>女方</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color" style="background-color: #87CEEB;"></view>
+        <text>男方</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 提交按钮 -->
   <view class="submit-container" wx:if="{{!mySeat && selectedSeat}}">
     <button class="submit-btn" bindtap="onSubmit">确认选座</button>

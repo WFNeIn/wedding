@@ -155,24 +155,17 @@
     </view>
 
     <!-- 婚宴地点 -->
-    <view class="info-detail-card">
+    <view class="info-detail-card" bindtap="goToDetails">
       <view class="detail-icon-box venue-icon">
         <text class="detail-icon">💒</text>
       </view>
       <view class="detail-content">
         <text class="detail-label">婚宴地点</text>
         <text class="detail-value">{{venue}}</text>
+        <text class="detail-address">{{address}}</text>
       </view>
-    </view>
-
-    <!-- 详细地址 -->
-    <view class="info-detail-card">
-      <view class="detail-icon-box address-icon">
-        <text class="detail-icon">📍</text>
-      </view>
-      <view class="detail-content">
-        <text class="detail-label">详细地址</text>
-        <text class="detail-value address">{{address}}</text>
+      <view class="detail-arrow">
+        <text class="arrow-icon">›</text>
       </view>
     </view>
 
