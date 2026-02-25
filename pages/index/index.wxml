@@ -1,31 +1,75 @@
 <!-- 首页 - 邀请函 -->
 <view class="index-container">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar {{currentTheme}}">
+    <view class="navbar-content">
+      <text class="navbar-title">峰琴喜事</text>
+    </view>
+  </view>
+
+  <!-- 主题切换按钮（始终显示） -->
+  <view class="theme-switch-btn" catchtap="toggleThemeSelector">
+    <text class="theme-icon">🎨</text>
+  </view>
+
   <!-- 开场动画遮罩 -->
-  <view class="opening-animation" wx:if="{{showOpening}}">
-    <!-- 请柬封面 -->
-    <view class="invitation-cover {{openingStep >= 1 ? 'opening' : ''}}">
-      <!-- 左侧封面 -->
-      <view class="cover-left">
-        <view class="cover-content">
-          <text class="cover-title">婚礼邀请函</text>
-          <view class="cover-divider"></view>
-          <text class="cover-names">{{groomName}} & {{brideName}}</text>
-          <text class="cover-date">{{weddingDate}}</text>
+  <view class="opening-animation {{currentTheme}}" wx:if="{{showOpening}}">
+    <!-- 请柬信封 -->
+    <view class="invitation-envelope {{openingStep >= 1 ? 'opening' : ''}}" bindtap="onClickInvitation">
+      <!-- 信封主体 -->
+      <view class="envelope-body">
+        <!-- 信封装饰纹路 -->
+        <view class="envelope-pattern">
+          <view class="pattern-line"></view>
+        </view>
+        
+        <!-- 新人名字 -->
+        <view class="envelope-names">
+          <text class="name-text">{{groomName}} & {{brideName}}</text>
+          <text class="date-text">{{weddingDateDisplay}}</text>
+        </view>
+        
+        <!-- 印章封条 -->
+        <view class="seal-wrapper {{openingStep >= 1 ? 'broken' : ''}}">
+          <view class="seal-stamp">
+            <view class="seal-border">
+              <view class="seal-content">
+                <text class="seal-text-top">囍</text>
+                <text class="seal-text-bottom">请柬</text>
+              </view>
+            </view>
+          </view>
         </view>
       </view>
       
-      <!-- 右侧封面 -->
-      <view class="cover-right">
-        <view class="cover-decoration">
-          <text class="decoration-icon">💒</text>
+      <!-- 信件内容 -->
+      <view class="letter-content {{openingStep >= 2 ? 'show' : ''}}">
+        <view class="letter-paper">
+          <view class="letter-header">
+            <text class="letter-title">婚礼邀请函</text>
+            <view class="letter-divider"></view>
+          </view>
+          <view class="letter-body">
+            <text class="letter-greeting">诚挚邀请您</text>
+            <text class="letter-message">共同见证我们的幸福时刻</text>
+            <view class="letter-couple">
+              <text class="couple-name">{{groomName}}</text>
+              <text class="couple-separator">&</text>
+              <text class="couple-name">{{brideName}}</text>
+            </view>
+            <text class="letter-date">{{weddingDateDisplay}}</text>
+          </view>
+          <view class="letter-footer">
+            <view class="footer-seal">💒</view>
+          </view>
         </view>
       </view>
-    </view>
-    
-    <!-- 淡入的内容 -->
-    <view class="fade-in-content {{openingStep >= 2 ? 'show' : ''}}">
-      <text class="welcome-text">诚挚邀请您</text>
-      <text class="welcome-subtitle">共同见证我们的幸福时刻</text>
+      
+      <!-- 点击提示 -->
+      <view class="click-hint" wx:if="{{openingStep === 0}}">
+        <text class="hint-text">点击拆封</text>
+        <view class="hint-icon">👆</view>
+      </view>
     </view>
   </view>
 
@@ -195,6 +239,75 @@
     <view class="tips-title">💝 诚挚邀请</view>
     <view class="tips-content">
       我们诚挚地邀请您参加我们的婚礼，共同见证这一美好时刻。期待您的到来！
+    </view>
+  </view>
+
+  <!-- 主题选择器弹窗（独立显示，不受showOpening影响） -->
+  <view class="theme-selector-modal {{currentTheme}}" wx:if="{{showThemeSelector}}" catchtap="closeThemeSelector">
+    <view class="theme-selector-content" catchtap="stopPropagation">
+      <view class="theme-selector-title">选择主题配色</view>
+      
+      <view class="theme-options">
+        <!-- 方案1：玫瑰金 + 香槟色 -->
+        <view class="theme-option {{currentTheme === 'theme1' ? 'active' : ''}}" 
+              data-theme="theme1" 
+              bindtap="switchTheme">
+          <view class="theme-preview theme1-preview">
+            <view class="preview-bg"></view>
+            <view class="preview-seal"></view>
+          </view>
+          <text class="theme-name">玫瑰金</text>
+          <text class="theme-desc">浪漫优雅</text>
+        </view>
+
+        <!-- 方案2：翡翠绿 + 金色 -->
+        <view class="theme-option {{currentTheme === 'theme2' ? 'active' : ''}}" 
+              data-theme="theme2" 
+              bindtap="switchTheme">
+          <view class="theme-preview theme2-preview">
+            <view class="preview-bg"></view>
+            <view class="preview-seal"></view>
+          </view>
+          <text class="theme-name">翡翠绿</text>
+          <text class="theme-desc">清新高级</text>
+        </view>
+
+        <!-- 方案3：宝石蓝 + 银色 -->
+        <view class="theme-option {{currentTheme === 'theme3' ? 'active' : ''}}" 
+              data-theme="theme3" 
+              bindtap="switchTheme">
+          <view class="theme-preview theme3-preview">
+            <view class="preview-bg"></view>
+            <view class="preview-seal"></view>
+          </view>
+          <text class="theme-name">宝石蓝</text>
+          <text class="theme-desc">典雅大气</text>
+        </view>
+
+        <!-- 方案4：中国红 + 金色 -->
+        <view class="theme-option {{currentTheme === 'theme4' ? 'active' : ''}}" 
+              data-theme="theme4" 
+              bindtap="switchTheme">
+          <view class="theme-preview theme4-preview">
+            <view class="preview-bg"></view>
+            <view class="preview-seal"></view>
+          </view>
+          <text class="theme-name">中国红</text>
+          <text class="theme-desc">传统喜庆</text>
+        </view>
+
+        <!-- 方案5：樱花粉 + 金色 -->
+        <view class="theme-option {{currentTheme === 'theme5' ? 'active' : ''}}" 
+              data-theme="theme5" 
+              bindtap="switchTheme">
+          <view class="theme-preview theme5-preview">
+            <view class="preview-bg"></view>
+            <view class="preview-seal"></view>
+          </view>
+          <text class="theme-name">樱花粉</text>
+          <text class="theme-desc">甜美梦幻</text>
+        </view>
+      </view>
     </view>
   </view>
 </view>

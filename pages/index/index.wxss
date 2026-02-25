@@ -6,8 +6,56 @@
   position: relative;
 }
 
+/* 自定义导航栏 */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 88rpx;
+  background: transparent;
+  z-index: 99999;
+  transition: all 0.3s ease;
+}
+
+.custom-navbar.theme1 {
+  background: linear-gradient(180deg, rgba(199, 107, 152, 0.95) 0%, rgba(199, 107, 152, 0) 100%);
+}
+
+.custom-navbar.theme2 {
+  background: linear-gradient(180deg, rgba(27, 122, 94, 0.95) 0%, rgba(27, 122, 94, 0) 100%);
+}
+
+.custom-navbar.theme3 {
+  background: linear-gradient(180deg, rgba(46, 80, 144, 0.95) 0%, rgba(46, 80, 144, 0) 100%);
+}
+
+.custom-navbar.theme4 {
+  background: linear-gradient(180deg, rgba(220, 20, 60, 0.95) 0%, rgba(220, 20, 60, 0) 100%);
+}
+
+.custom-navbar.theme5 {
+  background: linear-gradient(180deg, rgba(255, 182, 193, 0.95) 0%, rgba(255, 182, 193, 0) 100%);
+}
+
+.navbar-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20rpx;
+}
+
+.navbar-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
+  letter-spacing: 4rpx;
+}
+
 /* 首页内容初始隐藏 */
-.index-container > view:not(.opening-animation) {
+.index-container > view:not(.opening-animation):not(.theme-switch-btn):not(.theme-selector-modal) {
   opacity: 0;
 }
 
@@ -19,176 +67,420 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+  background: linear-gradient(135deg, #8B0000 0%, #B22222 30%, #DC143C 60%, #C41E3A 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeOut 0.8s ease 2.7s forwards;
+  /* 移除自动消失的动画 */
 }
 
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-/* 请柬封面容器 */
-.invitation-cover {
-  width: 600rpx;
-  height: 800rpx;
-  position: relative;
-  perspective: 2000rpx;
-}
-
-/* 左侧封面 */
-.cover-left {
+/* 添加背景装饰 */
+.opening-animation::before {
+  content: '';
   position: absolute;
+  top: 0;
   left: 0;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%);
-  border-radius: 24rpx 0 0 24rpx;
-  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
-  transform-origin: left center;
-  transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  z-index: 2;
-}
-
-.invitation-cover.opening .cover-left {
-  transform: rotateY(-160deg);
-}
-
-/* 右侧封面 */
-.cover-right {
-  position: absolute;
   right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 添加中式云纹装饰 */
+.opening-animation::after {
+  content: '';
+  position: absolute;
   top: 0;
-  width: 50%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle, rgba(255, 215, 0, 0.1) 1px, transparent 1px);
+  background-size: 50rpx 50rpx;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* 请柬信封容器 */
+.invitation-envelope {
+  width: 650rpx;
+  height: 900rpx;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.invitation-envelope:active {
+  transform: scale(0.98);
+}
+
+/* 信封主体 */
+.envelope-body {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-  border-radius: 0 24rpx 24rpx 0;
-  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: right center;
-  transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  z-index: 2;
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf0 100%);
+  border-radius: 32rpx;
+  box-shadow: 
+    0 40rpx 100rpx rgba(0, 0, 0, 0.4),
+    0 20rpx 50rpx rgba(139, 0, 0, 0.3),
+    0 0 0 1rpx rgba(255, 215, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.invitation-cover.opening .cover-right {
-  transform: rotateY(160deg);
+.invitation-envelope.opening .envelope-body {
+  transform: scale(0.95);
+  opacity: 0.3;
 }
 
-/* 封面内容 */
-.cover-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 60rpx 40rpx;
-  color: #ffffff;
+/* 信封装饰纹路 */
+.envelope-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.04;
+  background: 
+    repeating-linear-gradient(45deg, transparent, transparent 35rpx, #d4af37 35rpx, #d4af37 37rpx),
+    repeating-linear-gradient(-45deg, transparent, transparent 35rpx, #d4af37 35rpx, #d4af37 37rpx);
 }
 
-.cover-title {
-  font-size: 48rpx;
+.pattern-line {
+  display: none;
+}
+
+/* 信封上的新人名字 */
+.envelope-names {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 1;
+}
+
+.name-text {
+  display: block;
+  font-size: 56rpx;
   font-weight: 700;
-  letter-spacing: 8rpx;
-  margin-bottom: 40rpx;
-  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
-}
-
-.cover-divider {
-  width: 120rpx;
-  height: 4rpx;
-  background: rgba(255, 255, 255, 0.8);
-  margin-bottom: 40rpx;
-  border-radius: 2rpx;
-}
-
-.cover-names {
-  font-size: 36rpx;
-  font-weight: 600;
-  letter-spacing: 4rpx;
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 12rpx;
   margin-bottom: 30rpx;
-  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+  font-family: "KaiTi", "STKaiti", "PingFang SC", serif;
+  filter: drop-shadow(0 2rpx 8rpx rgba(212, 175, 55, 0.4));
 }
 
-.cover-date {
+.date-text {
+  display: block;
   font-size: 28rpx;
-  letter-spacing: 2rpx;
-  opacity: 0.95;
+  color: #8B4513;
+  letter-spacing: 4rpx;
+  font-weight: 500;
+  opacity: 0.9;
+  font-family: "KaiTi", "STKaiti", serif;
 }
 
-/* 封面装饰 */
-.cover-decoration {
-  animation: float 3s ease-in-out infinite;
+/* 印章封条容器 */
+.seal-wrapper {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.decoration-icon {
-  font-size: 120rpx;
-  filter: drop-shadow(0 8rpx 16rpx rgba(0, 0, 0, 0.2));
+.seal-wrapper.broken {
+  animation: sealBreak 0.8s ease forwards;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
+@keyframes sealBreak {
+  0% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
   }
   50% {
-    transform: translateY(-20rpx);
+    transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -200%) scale(0.3) rotate(45deg);
+    opacity: 0;
   }
 }
 
-/* 淡入内容 */
-.fade-in-content {
+/* 中式印章 */
+/* 中式印章 */
+.seal-stamp {
+  width: 220rpx;
+  height: 220rpx;
+  position: relative;
+  animation: sealFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 4rpx 16rpx rgba(212, 175, 55, 0.6));
+}
+
+@keyframes sealFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10rpx) rotate(2deg);
+  }
+}
+
+.seal-border {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    inset 0 0 0 8rpx rgba(139, 0, 0, 0.2),
+    inset 0 0 0 16rpx #d4af37,
+    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
+    0 0 40rpx rgba(212, 175, 55, 0.8);
+  position: relative;
+  opacity: 0.98;
+}
+
+.seal-border::before {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  z-index: 3;
+  width: 88%;
+  height: 88%;
+  border: 3rpx solid rgba(139, 0, 0, 0.3);
+  border-radius: 50%;
 }
 
-.fade-in-content.show {
-  opacity: 1;
+.seal-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
 }
 
-.welcome-text {
-  display: block;
-  font-size: 56rpx;
+.seal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #8B0000;
+  font-family: "KaiTi", "STKaiti", "PingFang SC", serif;
+  text-shadow: 0 1rpx 2rpx rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.seal-text-top {
+  font-size: 80rpx;
   font-weight: 700;
-  color: #87CEEB;
-  letter-spacing: 8rpx;
-  margin-bottom: 30rpx;
-  text-shadow: 0 4rpx 16rpx rgba(135, 206, 235, 0.3);
-  animation: slideUp 0.8s ease;
+  line-height: 1;
+  margin-bottom: 8rpx;
 }
 
-.welcome-subtitle {
-  display: block;
+.seal-text-bottom {
   font-size: 32rpx;
-  color: #666;
-  letter-spacing: 4rpx;
-  animation: slideUp 0.8s ease 0.2s both;
+  font-weight: 600;
+  letter-spacing: 8rpx;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40rpx);
+/* 点击提示 */
+.click-hint {
+  position: absolute;
+  bottom: -140rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
   }
-  to {
+  50% {
+    transform: translateX(-50%) translateY(-20rpx);
+  }
+}
+
+.hint-text {
+  font-size: 32rpx;
+  color: #FFD700;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  text-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.6);
+  letter-spacing: 6rpx;
+  font-family: "KaiTi", "STKaiti", "PingFang SC", serif;
+}
+
+.hint-icon {
+  font-size: 48rpx;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
   }
 }
 
-/* 页面内容淡入动画 */
+/* 信件内容 */
+.letter-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.8s ease;
+}
+
+.letter-content.show {
+  opacity: 1;
+  animation: letterUnfold 0.8s ease forwards;
+}
+
+@keyframes letterUnfold {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5) rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.letter-paper {
+  width: 600rpx;
+  background: linear-gradient(135deg, #fffef9 0%, #fefcf3 100%);
+  border-radius: 24rpx;
+  padding: 60rpx 50rpx;
+  box-shadow: 
+    0 30rpx 80rpx rgba(139, 69, 19, 0.2),
+    0 0 0 2rpx rgba(139, 69, 19, 0.1);
+  position: relative;
+}
+
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
+  bottom: 20rpx;
+  border: 2rpx solid rgba(139, 69, 19, 0.1);
+  border-radius: 16rpx;
+  pointer-events: none;
+}
+
+.letter-header {
+  text-align: center;
+  margin-bottom: 50rpx;
+}
+
+.letter-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #8B4513;
+  letter-spacing: 12rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+.letter-divider {
+  width: 200rpx;
+  height: 4rpx;
+  background: linear-gradient(to right, transparent, #DC143C, transparent);
+  margin: 30rpx auto 0;
+}
+
+.letter-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50rpx;
+}
+
+.letter-greeting {
+  font-size: 40rpx;
+  color: #8B4513;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  letter-spacing: 6rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+.letter-message {
+  font-size: 28rpx;
+  color: #A0522D;
+  margin-bottom: 40rpx;
+  letter-spacing: 4rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+.letter-couple {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.couple-name {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #DC143C;
+  letter-spacing: 4rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+.couple-separator {
+  font-size: 36rpx;
+  color: #DC143C;
+  margin: 0 20rpx;
+  font-weight: 300;
+}
+
+.letter-date {
+  font-size: 26rpx;
+  color: #A0522D;
+  letter-spacing: 2rpx;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+.letter-footer {
+  text-align: center;
+}
+
+.footer-seal {
+  font-size: 60rpx;
+  opacity: 0.8;
+}
+
+/* 移除旧样式 */
 .fade-in-page {
   animation: pageSlideIn 1s ease forwards !important;
 }
@@ -637,4 +929,284 @@
   line-height: 1.8;
   text-align: center;
   opacity: 0.95;
+}
+
+
+/* ==================== 主题切换功能 ==================== */
+
+/* 主题切换按钮 */
+.theme-switch-btn {
+  position: fixed !important;
+  top: 100rpx !important;
+  right: 30rpx !important;
+  width: 70rpx;
+  height: 70rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+  z-index: 999999 !important;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 1 !important;
+  visibility: visible !important;
+  backdrop-filter: blur(10rpx);
+}
+
+.theme-switch-btn:active {
+  transform: scale(0.9);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
+}
+
+.theme-icon {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.theme-icon {
+  font-size: 40rpx;
+}
+
+/* 主题选择器弹窗 */
+.theme-selector-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.theme-selector-content {
+  width: 90%;
+  max-width: 700rpx;
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 50rpx 40rpx;
+  animation: slideUp 0.3s ease;
+}
+
+.theme-selector-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30rpx;
+}
+
+.theme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  border-radius: 24rpx;
+  border: 3rpx solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.theme-option:active {
+  transform: scale(0.95);
+}
+
+.theme-option.active {
+  border-color: #d4af37;
+  background: linear-gradient(135deg, #fffef9 0%, #fefcf3 100%);
+}
+
+.theme-preview {
+  width: 120rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+.preview-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.preview-seal {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 方案1：玫瑰金 */
+.theme1-preview .preview-bg {
+  background: linear-gradient(135deg, #8B4789 0%, #C76B98 50%, #E8A0BF 100%);
+}
+
+.theme1-preview .preview-seal {
+  background: linear-gradient(135deg, #E8A0BF 0%, #F4C2C2 50%, #E8A0BF 100%);
+}
+
+/* 方案2：翡翠绿 */
+.theme2-preview .preview-bg {
+  background: linear-gradient(135deg, #0F4C3A 0%, #1B7A5E 50%, #2D9B81 100%);
+}
+
+.theme2-preview .preview-seal {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+}
+
+/* 方案3：宝石蓝 */
+.theme3-preview .preview-bg {
+  background: linear-gradient(135deg, #1B3A6D 0%, #2E5090 50%, #4169B3 100%);
+}
+
+.theme3-preview .preview-seal {
+  background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #C0C0C0 100%);
+}
+
+/* 方案4：中国红 */
+.theme4-preview .preview-bg {
+  background: linear-gradient(135deg, #8B0000 0%, #B22222 30%, #DC143C 60%, #C41E3A 100%);
+}
+
+.theme4-preview .preview-seal {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+}
+
+/* 方案5：樱花粉 */
+.theme5-preview .preview-bg {
+  background: linear-gradient(135deg, #9B4F96 0%, #C76B98 50%, #FFB6C1 100%);
+}
+
+.theme5-preview .preview-seal {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+}
+
+.theme-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.theme-desc {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* ==================== 主题样式变量 ==================== */
+
+/* 方案1：玫瑰金 + 香槟色 */
+.opening-animation.theme1 {
+  background: linear-gradient(135deg, #8B4789 0%, #C76B98 50%, #E8A0BF 100%);
+}
+
+.opening-animation.theme1 .seal-border {
+  background: linear-gradient(135deg, #E8A0BF 0%, #F4C2C2 50%, #E8A0BF 100%);
+  box-shadow: 
+    inset 0 0 0 8rpx rgba(139, 71, 137, 0.2),
+    inset 0 0 0 16rpx #E8A0BF,
+    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
+    0 0 40rpx rgba(232, 160, 191, 0.8);
+}
+
+.opening-animation.theme1 .seal-content {
+  color: #8B4789;
+}
+
+.opening-animation.theme1 .hint-text {
+  color: #F4C2C2;
+  text-shadow: 0 2rpx 8rpx rgba(244, 194, 194, 0.6);
+}
+
+/* 方案2：翡翠绿 + 金色 */
+.opening-animation.theme2 {
+  background: linear-gradient(135deg, #0F4C3A 0%, #1B7A5E 50%, #2D9B81 100%);
+}
+
+.opening-animation.theme2 .seal-border {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+  box-shadow: 
+    inset 0 0 0 8rpx rgba(15, 76, 58, 0.2),
+    inset 0 0 0 16rpx #d4af37,
+    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
+    0 0 40rpx rgba(212, 175, 55, 0.8);
+}
+
+.opening-animation.theme2 .seal-content {
+  color: #0F4C3A;
+}
+
+.opening-animation.theme2 .hint-text {
+  color: #FFD700;
+  text-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.6);
+}
+
+/* 方案3：宝石蓝 + 银色 */
+.opening-animation.theme3 {
+  background: linear-gradient(135deg, #1B3A6D 0%, #2E5090 50%, #4169B3 100%);
+}
+
+.opening-animation.theme3 .seal-border {
+  background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #C0C0C0 100%);
+  box-shadow: 
+    inset 0 0 0 8rpx rgba(27, 58, 109, 0.2),
+    inset 0 0 0 16rpx #C0C0C0,
+    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
+    0 0 40rpx rgba(192, 192, 192, 0.8);
+}
+
+.opening-animation.theme3 .seal-content {
+  color: #1B3A6D;
+}
+
+.opening-animation.theme3 .hint-text {
+  color: #E8E8E8;
+  text-shadow: 0 2rpx 8rpx rgba(232, 232, 232, 0.6);
+}
+
+/* 方案4：中国红 + 金色（默认） */
+.opening-animation.theme4 {
+  background: linear-gradient(135deg, #8B0000 0%, #B22222 30%, #DC143C 60%, #C41E3A 100%);
+}
+
+/* 方案5：樱花粉 + 金色 */
+.opening-animation.theme5 {
+  background: linear-gradient(135deg, #9B4F96 0%, #C76B98 50%, #FFB6C1 100%);
+}
+
+.opening-animation.theme5 .seal-border {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);
+  box-shadow: 
+    inset 0 0 0 8rpx rgba(155, 79, 150, 0.2),
+    inset 0 0 0 16rpx #d4af37,
+    inset 0 6rpx 12rpx rgba(0, 0, 0, 0.15),
+    0 0 40rpx rgba(212, 175, 55, 0.8);
+}
+
+.opening-animation.theme5 .seal-content {
+  color: #9B4F96;
+}
+
+.opening-animation.theme5 .hint-text {
+  color: #FFD700;
+  text-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.6);
 }

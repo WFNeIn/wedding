@@ -34,7 +34,10 @@ Page({
     timer: null,
     // 开场动画相关
     showOpening: false,
-    openingStep: 0
+    openingStep: 0,
+    // 主题相关
+    currentTheme: 'theme4', // 默认方案4：中国红+金色
+    showThemeSelector: false
   },
 
   /**
@@ -47,16 +50,35 @@ Page({
   },
 
   /**
+   * 页面显示时重新启动倒计时
+   */
+  onShow() {
+    this.startCountdown();
+    // 如果正在显示开场动画，隐藏TabBar
+    if (this.data.showOpening) {
+      wx.hideTabBar({
+        animation: false
+      });
+    }
+  },
+
+  /**
    * 检查是否需要显示开场动画
    */
   checkAndShowOpening() {
     // 检查是否是首次进入
     const hasShownOpening = wx.getStorageSync('hasShownOpening');
     
-    if (!hasShownOpening) {
+    // 临时：每次都显示动画（方便测试）
+    // 正式发布时可以改回 if (!hasShownOpening)
+    if (true) {  // 改为 !hasShownOpening 可恢复只显示一次
       // 首次进入,显示开场动画
       this.setData({ showOpening: true });
-      this.playOpeningAnimation();
+      // 隐藏底部TabBar，增强沉浸感
+      wx.hideTabBar({
+        animation: false
+      });
+      // 不自动播放动画，等待用户点击
       
       // 标记已显示过
       wx.setStorageSync('hasShownOpening', true);
@@ -64,26 +86,37 @@ Page({
   },
 
   /**
+   * 用户点击请柬，开始播放动画
+   */
+  onClickInvitation() {
+    if (this.data.openingStep === 0) {
+      this.playOpeningAnimation();
+    }
+  },
+
+  /**
    * 播放开场动画
    */
   playOpeningAnimation() {
-    // 步骤1: 0.5秒后开始打开请柬
-    setTimeout(() => {
-      this.setData({ openingStep: 1 });
-    }, 500);
+    // 步骤1: 立即拆开印章
+    this.setData({ openingStep: 1 });
     
-    // 步骤2: 1.5秒后显示欢迎文字
+    // 步骤2: 1.2秒后展开信件内容
     setTimeout(() => {
       this.setData({ openingStep: 2 });
-    }, 1500);
+    }, 1200);
     
-    // 步骤3: 3秒后隐藏整个动画
+    // 步骤3: 4秒后隐藏整个动画，进入首页
     setTimeout(() => {
       this.setData({ 
         showOpening: false,
         openingStep: 0
       });
-    }, 3500);
+      // 显示底部TabBar
+      wx.showTabBar({
+        animation: true
+      });
+    }, 4000);
   },
 
   /**
@@ -200,13 +233,6 @@ Page({
   },
 
   /**
-   * 页面显示时重新启动倒计时
-   */
-  onShow() {
-    this.startCountdown();
-  },
-
-  /**
    * 页面隐藏时停止倒计时
    */
   onHide() {
@@ -308,5 +334,47 @@ Page({
         });
       }
     });
+  },
+
+  /**
+   * 切换主题
+   */
+  switchTheme(e) {
+    const theme = e.currentTarget.dataset.theme;
+    this.setData({ 
+      currentTheme: theme,
+      showThemeSelector: false
+    });
+    
+    wx.showToast({
+      title: '主题已切换',
+      icon: 'success',
+      duration: 1500
+    });
+  },
+
+  /**
+   * 显示/隐藏主题选择器
+   */
+  toggleThemeSelector() {
+    this.setData({
+      showThemeSelector: !this.data.showThemeSelector
+    });
+  },
+
+  /**
+   * 关闭主题选择器
+   */
+  closeThemeSelector() {
+    this.setData({
+      showThemeSelector: false
+    });
+  },
+
+  /**
+   * 阻止事件冒泡
+   */
+  stopPropagation() {
+    // 阻止点击弹窗内容时关闭
   }
 });
