@@ -1,12 +1,5 @@
 <!-- 祝福留言板 -->
 <view class="blessings-container" catchtouchmove="preventTouchMove">
-  <!-- 页面标题 -->
-  <view class="page-header">
-    <text class="page-title">祝福留言</text>
-    <view class="title-divider"></view>
-    <text class="page-desc">留下您的美好祝福</text>
-  </view>
-
   <!-- 留言列表 -->
   <scroll-view 
     class="blessings-list" 
@@ -72,7 +65,7 @@
     <view class="input-box">
       <textarea 
         class="input-textarea"
-        placeholder="写下您的祝福..."
+        placeholder="留下您的祝福"
         value="{{inputContent}}"
         bindinput="onInput"
         maxlength="500"

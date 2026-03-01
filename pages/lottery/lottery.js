@@ -40,13 +40,10 @@ Page({
     }
 
     const db = wx.cloud.database();
-    const _ = db.command;
 
-    // 直接查询用户的号码(使用云数据库权限自动获取openid)
+    // 查询当前用户的号码（云数据库会自动根据权限过滤当前用户的数据）
     db.collection('lottery_numbers')
-      .where({
-        _openid: _.exists(true)
-      })
+      .limit(1)
       .get()
       .then(res => {
         if (res.data.length > 0) {

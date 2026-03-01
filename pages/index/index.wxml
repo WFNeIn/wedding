@@ -7,8 +7,8 @@
     </view>
   </view>
 
-  <!-- 主题切换按钮（始终显示） -->
-  <view class="theme-switch-btn" catchtap="toggleThemeSelector">
+  <!-- 主题切换按钮（仅在开场动画期间显示） -->
+  <view class="theme-switch-btn" catchtap="toggleThemeSelector" wx:if="{{showOpening}}">
     <text class="theme-icon">🎨</text>
   </view>
 
