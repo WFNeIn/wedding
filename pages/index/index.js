@@ -4,13 +4,14 @@ const app = getApp();
 
 Page({
   data: {
-    // 婚纱照片数组
-    photos: [
-      '/images/20260223-183518.jpg',
-      '/images/20260223-183532.jpg',
-      '/images/20260223-183542.jpg',
-      '/images/20260223-183537.jpg',
-    ],
+    // 主要婚纱照（第2张）
+    mainPhoto: '/images/20260223-183532.jpg',
+    // 祝福弹幕数据
+    barrages: [],
+    blessings: [], // 所有祝福数据
+    barrageTimer: null, // 弹幕定时器
+    // 天气数据（已移除）
+    // weatherData: null,
     // 新人信息
     groomName: '',
     brideName: '',
@@ -47,6 +48,7 @@ Page({
     this.initWeddingInfo();
     this.checkAndShowOpening();
     this.startCountdown();
+    this.loadBlessings(); // 加载祝福数据
   },
 
   /**
@@ -54,6 +56,7 @@ Page({
    */
   onShow() {
     this.startCountdown();
+    this.startBarrage(); // 启动弹幕
     // 如果正在显示开场动画，隐藏TabBar
     if (this.data.showOpening) {
       wx.hideTabBar({
@@ -246,6 +249,7 @@ Page({
    */
   onHide() {
     this.stopCountdown();
+    this.stopBarrage(); // 停止弹幕
   },
 
   /**
@@ -253,10 +257,11 @@ Page({
    */
   onUnload() {
     this.stopCountdown();
+    this.stopBarrage(); // 停止弹幕
   },
 
   /**
-   * 打开墨迹天气小程序（半屏模式）
+   * 打开墨迹天气小程序查看当日天气（半屏模式）
    */
   openMojiWeather() {
     const weddingInfo = app.globalData.weddingInfo;
@@ -266,73 +271,65 @@ Page({
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const day = String(dateObj.getDate()).padStart(2, '0');
-    const formattedDate = `${year}${month}${day}`; // 格式：20250504
+    const formattedDate = `${year}${month}${day}`; // 格式：20260504
     
     // 获取婚礼地点的城市信息（武汉）
     const city = '武汉';
     
-    // 显示加载提示
-    wx.showLoading({
-      title: '正在打开...',
-      mask: true
-    });
+    console.log('打开墨迹天气（半屏），日期:', formattedDate, '城市:', city);
     
-    // 使用半屏打开API
+    // 使用半屏模式打开墨迹天气小程序
     wx.openEmbeddedMiniProgram({
-      appId: 'wxb4ba3c02aa476ea1', // 墨迹天气小程序AppID
+      appId: 'wxc30ae3bc7fb4cab1', // 墨迹天气小程序AppID
       path: 'pages/index/index',
       envVersion: 'release',
       extraData: {
         city: city,
         date: formattedDate
       },
-      success: (res) => {
-        wx.hideLoading();
-        console.log('成功以半屏模式打开墨迹天气', res);
+      success: () => {
+        console.log('成功以半屏模式打开墨迹天气');
       },
       fail: (err) => {
-        wx.hideLoading();
         console.error('半屏打开失败，尝试全屏打开', err);
         
         // 半屏打开失败，尝试全屏打开
         wx.navigateToMiniProgram({
-          appId: 'wxb4ba3c02aa476ea1',
+          appId: 'wxc30ae3bc7fb4cab1',
           path: 'pages/index/index',
           envVersion: 'release',
           extraData: {
             city: city,
             date: formattedDate
           },
-          success: (res) => {
-            console.log('成功以全屏模式打开墨迹天气', res);
+          success: () => {
+            console.log('成功以全屏模式打开墨迹天气');
           },
           fail: (err2) => {
             console.error('全屏打开也失败', err2);
             
-            let errorMsg = '无法打开墨迹天气小程序';
-            
-            if (err2.errMsg.includes('cancel')) {
+            // 如果用户取消，不显示错误
+            if (err2.errMsg && err2.errMsg.includes('cancel')) {
               return;
-            } else if (err2.errMsg.includes('appId')) {
-              errorMsg = '墨迹天气小程序配置错误';
-            } else if (err2.errMsg.includes('permission')) {
-              errorMsg = '没有权限打开墨迹天气';
             }
             
+            // 其他错误，提示用户手动搜索
             wx.showModal({
               title: '温馨提示',
-              content: errorMsg + '\n\n您可以手动搜索"墨迹天气"小程序查看' + weddingInfo.date + '武汉的天气',
+              content: '无法打开墨迹天气小程序\n\n您可以在微信中搜索"墨迹天气"小程序\n\n查看 ' + weddingInfo.date + ' 武汉 的天气预报',
               showCancel: true,
               cancelText: '知道了',
               confirmText: '复制日期',
-              success: (modalRes) => {
-                if (modalRes.confirm) {
+              success: (res) => {
+                if (res.confirm) {
+                  // 复制日期和城市到剪贴板
                   wx.setClipboardData({
                     data: weddingInfo.date + ' 武汉',
                     success: () => {
                       wx.showToast({
-                        title: '已复制日期',
-                        icon: 'success'
+                        title: '已复制到剪贴板',
+                        icon: 'success',
+                        duration: 2000
                       });
                     }
                   });
@@ -344,6 +341,172 @@ Page({
       }
     });
   },
+
+  /**
+   * 加载祝福数据
+   */
+  loadBlessings() {
+    const db = wx.cloud.database();
+    db.collection('blessings')
+      .orderBy('createTime', 'desc')
+      .limit(100)
+      .get()
+      .then(res => {
+        if (res.data && res.data.length > 0) {
+          // 有真实祝福数据
+          this.setData({
+            blessings: res.data.map(item => item.content)
+          });
+        } else {
+          // 没有数据，使用模拟数据
+          this.generateMockBlessings();
+        }
+        // 启动弹幕
+        this.startBarrage();
+      })
+      .catch(err => {
+        console.error('加载祝福失败:', err);
+        // 加载失败，使用模拟数据
+        this.generateMockBlessings();
+        this.startBarrage();
+      });
+  },
+
+  /**
+   * 生成模拟祝福数据（50条）
+   */
+  generateMockBlessings() {
+    const mockBlessings = [
+      '祝新婚快乐，百年好合！',
+      '愿你们永远幸福美满！',
+      '恭喜恭喜，白头偕老！',
+      '祝福新人，早生贵子！',
+      '新婚大喜，甜甜蜜蜜！',
+      '执子之手，与子偕老！',
+      '天作之合，佳偶天成！',
+      '相亲相爱，幸福一生！',
+      '琴瑟和鸣，鸾凤和鸣！',
+      '花好月圆，永结同心！',
+      '祝你们新婚愉快，幸福美满！',
+      '愿爱情甜蜜，婚姻美满！',
+      '恭祝百年好合，永浴爱河！',
+      '祝福你们，白头到老！',
+      '新婚快乐，永远幸福！',
+      '祝两位新人，恩爱有加！',
+      '愿你们的爱情，天长地久！',
+      '祝福新婚，美满幸福！',
+      '恭喜你们，喜结良缘！',
+      '祝新人，幸福美满！',
+      '愿你们相濡以沫，恩爱永久！',
+      '祝福你们，永远快乐！',
+      '新婚大吉，百年好合！',
+      '祝你们，幸福一生！',
+      '恭喜新婚，甜蜜美满！',
+      '愿你们的婚姻，幸福长久！',
+      '祝福新人，永远相爱！',
+      '新婚快乐，早生贵子！',
+      '祝你们，白头偕老！',
+      '恭喜恭喜，幸福美满！',
+      '愿你们，永远幸福！',
+      '祝新婚愉快，恩爱有加！',
+      '恭祝新婚，百年好合！',
+      '祝福你们，甜甜蜜蜜！',
+      '新婚大喜，永浴爱河！',
+      '愿你们，相亲相爱！',
+      '祝新人，幸福快乐！',
+      '恭喜新婚，天长地久！',
+      '祝福你们，美满幸福！',
+      '新婚快乐，永结同心！',
+      '愿你们，恩爱一生！',
+      '祝新婚，幸福美满！',
+      '恭喜你们，喜结连理！',
+      '祝福新人，永远快乐！',
+      '新婚大吉，甜蜜幸福！',
+      '愿你们，白头到老！',
+      '祝新婚愉快，百年好合！',
+      '恭祝新人，幸福一生！',
+      '祝福你们，永远相爱！',
+      '新婚快乐，恩爱永久！'
+    ];
+    
+    this.setData({
+      blessings: mockBlessings
+    });
+  },
+
+  /**
+   * 启动弹幕
+   */
+  startBarrage() {
+    if (this.data.blessings.length === 0) return;
+    
+    // 清除旧的定时器
+    if (this.data.barrageTimer) {
+      clearInterval(this.data.barrageTimer);
+    }
+    
+    // 每2秒添加一条弹幕
+    const timer = setInterval(() => {
+      this.addBarrage();
+    }, 2000);
+    
+    this.setData({ barrageTimer: timer });
+    
+    // 立即添加第一条
+    this.addBarrage();
+  },
+
+  /**
+   * 停止弹幕
+   */
+  stopBarrage() {
+    if (this.data.barrageTimer) {
+      clearInterval(this.data.barrageTimer);
+      this.setData({ barrageTimer: null });
+    }
+  },
+
+  /**
+   * 添加一条弹幕
+   */
+  addBarrage() {
+    const blessings = this.data.blessings;
+    if (blessings.length === 0) return;
+    
+    // 随机选择一条祝福
+    const content = blessings[Math.floor(Math.random() * blessings.length)];
+    
+    // 随机生成弹幕位置和速度
+    const top = Math.random() * 600 + 50; // 50-650rpx之间
+    const duration = Math.random() * 5 + 10; // 10-15秒
+    const delay = 0;
+    
+    const newBarrage = {
+      id: Date.now() + Math.random(),
+      content,
+      top,
+      duration,
+      delay
+    };
+    
+    // 添加到弹幕列表
+    const barrages = [...this.data.barrages, newBarrage];
+    
+    // 限制弹幕数量，最多保留20条
+    if (barrages.length > 20) {
+      barrages.shift();
+    }
+    
+    this.setData({ barrages });
+    
+    // 动画结束后移除弹幕
+    setTimeout(() => {
+      const currentBarrages = this.data.barrages.filter(item => item.id !== newBarrage.id);
+      this.setData({ barrages: currentBarrages });
+    }, (duration + delay) * 1000);
+  },
+
+
 
   /**
    * 切换主题

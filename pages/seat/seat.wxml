@@ -2,12 +2,7 @@
 <view class="seat-container">
   <!-- 可缩放的婚宴厅布局 -->
   <view class="hall-layout-wrapper">
-    <view 
-      class="hall-layout" 
-      style="transform: scale({{scale}}); transform-origin: center center;"
-      bindtouchstart="onTouchStart"
-      bindtouchmove="onTouchMove"
-      bindtouchend="onTouchEnd">
+    <view class="hall-layout">
       
       <!-- 婚宴厅布局 - 5列6行方格 -->
       <view class="hall-content">

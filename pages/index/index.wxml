@@ -87,27 +87,25 @@
     </view>
   </view>
 
-  <!-- 轮播图 - 婚纱照 -->
-  <view class="swiper-container {{showOpening ? '' : 'fade-in-page'}}">
-    <swiper 
-      class="photo-swiper" 
-      indicator-dots="{{true}}"
-      indicator-color="rgba(255, 255, 255, 0.5)"
-      indicator-active-color="#87CEEB"
-      autoplay="{{true}}"
-      interval="{{3000}}"
-      duration="{{500}}"
-      circular="{{true}}"
-    >
-      <swiper-item wx:for="{{photos}}" wx:key="index">
-        <image 
-          src="{{item}}" 
-          mode="aspectFill" 
-          class="photo-image"
-          binderror="onImageError"
-        />
-      </swiper-item>
-    </swiper>
+  <!-- 婚纱照 + 祝福弹幕 -->
+  <view class="photo-container {{showOpening ? '' : 'fade-in-page'}}">
+    <image 
+      src="{{mainPhoto}}" 
+      mode="aspectFill" 
+      class="photo-image"
+      binderror="onImageError"
+    />
+    <!-- 祝福弹幕 -->
+    <view class="barrage-container">
+      <view 
+        wx:for="{{barrages}}" 
+        wx:key="id"
+        class="barrage-item"
+        style="top: {{item.top}}rpx; animation-duration: {{item.duration}}s; animation-delay: {{item.delay}}s;"
+      >
+        <text class="barrage-text">{{item.content}}</text>
+      </view>
+    </view>
   </view>
 
   <!-- 婚礼信息卡片 -->
@@ -130,7 +128,7 @@
       <view class="detail-content">
         <text class="detail-label">婚礼日期</text>
         <text class="detail-value">{{weddingDateDisplay}}</text>
-        <text class="detail-hint">点击查看当日天气</text>
+        <text class="detail-hint">点击查看当日天气预报</text>
       </view>
       <view class="detail-arrow">
         <text class="arrow-icon">›</text>
@@ -146,6 +144,9 @@
         <text class="detail-label">婚宴地点</text>
         <text class="detail-value">{{venue}}</text>
         <text class="detail-address">{{address}}</text>
+        <view class="weather-info" wx:if="{{weatherData}}">
+          <text class="weather-text">{{weatherData.weather}} {{weatherData.temp}}℃ {{weatherData.windDir}}{{weatherData.windScale}}</text>
+        </view>
       </view>
       <view class="detail-arrow">
         <text class="arrow-icon">›</text>
