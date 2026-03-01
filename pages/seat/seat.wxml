@@ -1,254 +1,250 @@
 <!--pages/seat/seat.wxml-->
 <view class="seat-container">
-  <!-- 我的座位信息 -->
-  <view class="my-seat-info" wx:if="{{mySeat}}">
-    <view class="info-title">我的座位</view>
-    <view class="info-content">
-      第{{mySeat.tableNum}}桌 {{mySeat.seatNum}}号座位
-      <text class="guest-type-tag">{{mySeat.guestTypeName}}</text>
-    </view>
-  </view>
-
-  <!-- 宾客类型选择 -->
-  <view class="guest-type-selector" wx:if="{{!mySeat}}">
-    <view class="selector-title">请选择您的宾客类型</view>
-    <view class="type-list">
-      <view 
-        class="type-item {{selectedGuestType === 'classmate' ? 'selected' : ''}}"
-        data-type="classmate"
-        bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #FF6B6B;"></view>
-        <text>同学 (2桌)</text>
-      </view>
-      <view 
-        class="type-item {{selectedGuestType === 'bride_family' ? 'selected' : ''}}"
-        data-type="bride_family"
-        bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #FFB6C1;"></view>
-        <text>女方亲友 (6桌)</text>
-      </view>
-      <view 
-        class="type-item {{selectedGuestType === 'groom_family' ? 'selected' : ''}}"
-        data-type="groom_family"
-        bindtap="onTypeSelect">
-        <view class="type-color" style="background-color: #87CEEB;"></view>
-        <text>男方亲友 (12桌)</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 缩放提示 -->
-  <view class="zoom-hint">
-    <text>💡 双指捏合可缩放，滑动查看更多座位</text>
-  </view>
-
-  <!-- 可缩放滚动区域 -->
-  <scroll-view 
-    class="scroll-container" 
-    scroll-x="{{true}}" 
-    scroll-y="{{true}}"
-    bindtouchstart="onTouchStart"
-    bindtouchmove="onTouchMove"
-    bindtouchend="onTouchEnd">
-    
-    <!-- 可缩放的内容区域 -->
+  <!-- 可缩放的婚宴厅布局 -->
+  <view class="hall-layout-wrapper">
     <view 
-      class="zoomable-content" 
-      style="transform: scale({{scale}}); transform-origin: {{originX}}px {{originY}}px;">
+      class="hall-layout" 
+      style="transform: scale({{scale}}); transform-origin: center center;"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd">
       
-      <!-- 座位布局 -->
-      <view class="layout-container">
-        <!-- 舞台 -->
-        <view class="stage" bindlongpress="onAdminAccess">
-          <text>🎭 舞台 🎭</text>
+      <!-- 婚宴厅布局 - 5列6行方格 -->
+      <view class="hall-content">
+        <!-- T字型舞台 - 完整元素 -->
+        <view class="stage-container">
+          <view class="stage-horizontal">
+            <text class="stage-text">🎭 舞台 🎭</text>
+          </view>
+          <view class="stage-vertical"></view>
         </view>
 
-        <!-- 座位区域 -->
-        <view class="seats-area">
-          <!-- 左侧座位 (3列5排，15桌) -->
-          <view class="seats-side left-side">
-            <view class="side-label">左侧区域 (3列5排)</view>
-            
-            <!-- 同学区 (1-2桌) -->
-            <view class="area-section classmate-area">
-              <view class="area-label">同学区</view>
-              <view class="tables-grid left-grid">
-                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum <= 2}}" class="table-group">
-                  <view class="table-label">{{item.tableNum}}桌</view>
-                  <view class="round-table-container">
-                    <!-- 圆桌 -->
-                    <view class="round-table">
-                      <text class="table-number">{{item.tableNum}}</text>
-                    </view>
-                    <!-- 座位围绕圆桌 -->
-                    <view 
-                      wx:for="{{item.seats}}" 
-                      wx:for-item="seat"
-                      wx:key="seatId"
-                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
-                      data-seat="{{seat}}"
-                      bindtap="onSeatClick">
-                      <text class="seat-label">{{seat.seatNum}}</text>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </view>
+        <!-- 入口 - 浮动在右侧中间 -->
+        <view class="entrance-gate">
+          <text class="entrance-text">🚪 入口</text>
+        </view>
 
-            <!-- 女方亲友区 (3-8桌) -->
-            <view class="area-section bride-area">
-              <view class="area-label">女方亲友区</view>
-              <view class="tables-grid left-grid">
-                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum >= 3 && item.tableNum <= 8}}" class="table-group">
-                  <view class="table-label">{{item.tableNum}}桌</view>
-                  <view class="round-table-container">
-                    <!-- 圆桌 -->
-                    <view class="round-table">
-                      <text class="table-number">{{item.tableNum}}</text>
-                    </view>
-                    <!-- 座位围绕圆桌 -->
-                    <view 
-                      wx:for="{{item.seats}}" 
-                      wx:for-item="seat"
-                      wx:key="seatId"
-                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
-                      data-seat="{{seat}}"
-                      bindtap="onSeatClick">
-                      <text class="seat-label">{{seat.seatNum}}</text>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </view>
+        <!-- 第1行：空 + 空 + 空 + 空 + 空 -->
+        <view class="hall-row">
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell empty"></view>
+        </view>
 
-            <!-- 男方亲友区-左侧部分 (9-15桌) -->
-            <view class="area-section groom-area">
-              <view class="area-label">男方亲友区</view>
-              <view class="tables-grid left-grid">
-                <view wx:for="{{leftTables}}" wx:key="tableNum" wx:if="{{item.tableNum >= 9}}" class="table-group">
-                  <view class="table-label">{{item.tableNum}}桌</view>
-                  <view class="round-table-container">
-                    <!-- 圆桌 -->
-                    <view class="round-table">
-                      <text class="table-number">{{item.tableNum}}</text>
-                    </view>
-                    <!-- 座位围绕圆桌 -->
-                    <view 
-                      wx:for="{{item.seats}}" 
-                      wx:for-item="seat"
-                      wx:key="seatId"
-                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                      style="background-color: {{seat.guestType ? seat.color : seat.areaColor}}; opacity: {{seat.guestType ? 0.6 : 0.3}};"
-                      data-seat="{{seat}}"
-                      bindtap="onSeatClick">
-                      <text class="seat-label">{{seat.seatNum}}</text>
-                    </view>
-                  </view>
-                </view>
+        <!-- 第2行：桌1 + 桌2 + 空 + 桌3 + 桌4 -->
+        <view class="hall-row">
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[0].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[0].tableNum}}</text>
               </view>
+              <view class="table-label">{{allTables[0].guestTypeName}}</view>
             </view>
           </view>
-
-          <!-- 通道 -->
-          <view class="aisle">
-            <text>通道</text>
-          </view>
-
-          <!-- 右侧座位 (2列3排，6桌) -->
-          <view class="seats-side right-side">
-            <view class="side-label">右侧区域 (2列3排)</view>
-            
-            <!-- 男方亲友区-右侧部分 (16-21桌) -->
-            <view class="area-section groom-area">
-              <view class="area-label">男方亲友区（续）</view>
-              <view class="tables-grid right-grid">
-                <view wx:for="{{rightTables}}" wx:key="tableNum" class="table-group">
-                  <view class="table-label">{{item.tableNum}}桌{{item.tableNum === 21 ? '(备用)' : ''}}</view>
-                  <view class="round-table-container">
-                    <!-- 圆桌 -->
-                    <view class="round-table {{item.tableNum === 21 ? 'reserve-table' : ''}}">
-                      <text class="table-number">{{item.tableNum}}</text>
-                    </view>
-                    <!-- 座位围绕圆桌 -->
-                    <view 
-                      wx:for="{{item.seats}}" 
-                      wx:for-item="seat"
-                      wx:key="seatId"
-                      class="seat-item seat-position-{{seat.seatNum}} {{seat.status}} {{selectedSeat && selectedSeat.seatId === seat.seatId ? 'selected' : ''}}"
-                      style="background-color: {{seat.guestType ? seat.color : (seat.isReserveTable ? '#e0e0e0' : seat.areaColor)}}; opacity: {{seat.guestType ? 0.6 : (seat.isReserveTable ? 0.4 : 0.3)}};"
-                      data-seat="{{seat}}"
-                      bindtap="onSeatClick">
-                      <text class="seat-label">{{seat.seatNum}}</text>
-                    </view>
-                  </view>
-                </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[1].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[1].tableNum}}</text>
               </view>
+              <view class="table-label">{{allTables[1].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[2].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[2].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[2].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[3].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[3].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[3].guestTypeName}}</view>
             </view>
           </view>
         </view>
-      </view>
-    </view>
-  </scroll-view>
 
-  <!-- 小地图 -->
-  <view class="minimap-container">
-    <view class="minimap-title">座位布局</view>
-    <view class="minimap-content">
-      <!-- 舞台 -->
-      <view class="minimap-stage"></view>
-      
-      <!-- 座位区域 -->
-      <view class="minimap-seats">
-        <!-- 左侧区域 -->
-        <view class="minimap-side minimap-left">
-          <!-- 同学区 (1-2桌) -->
-          <view class="minimap-area classmate">
-            <view class="minimap-table" wx:for="{{2}}" wx:key="*this"></view>
+        <!-- 第3行：桌5 + 桌6 + 空 + 桌7 + 桌8 -->
+        <view class="hall-row">
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[4].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[4].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[4].guestTypeName}}</view>
+            </view>
           </view>
-          <!-- 女方亲友区 (3-8桌) -->
-          <view class="minimap-area bride">
-            <view class="minimap-table" wx:for="{{6}}" wx:key="*this"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[5].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[5].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[5].guestTypeName}}</view>
+            </view>
           </view>
-          <!-- 男方亲友区左侧 (9-15桌) -->
-          <view class="minimap-area groom">
-            <view class="minimap-table" wx:for="{{7}}" wx:key="*this"></view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[6].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[6].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[6].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[7].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[7].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[7].guestTypeName}}</view>
+            </view>
           </view>
         </view>
-        
-        <!-- 通道 -->
-        <view class="minimap-aisle"></view>
-        
-        <!-- 右侧区域 -->
-        <view class="minimap-side minimap-right">
-          <!-- 男方亲友区右侧 (16-21桌) -->
-          <view class="minimap-area groom">
-            <view class="minimap-table" wx:for="{{6}}" wx:key="*this"></view>
+
+        <!-- 第4行：桌9 + 桌10 + 空 + 桌11 + 桌12 -->
+        <view class="hall-row">
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[8].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[8].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[8].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[9].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[9].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[9].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[10].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[10].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[10].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[11].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[11].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[11].guestTypeName}}</view>
+            </view>
           </view>
         </view>
-      </view>
-    </view>
-    
-    <!-- 图例 -->
-    <view class="minimap-legend">
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #FF6B6B;"></view>
-        <text>同学</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #FFB6C1;"></view>
-        <text>女方</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #87CEEB;"></view>
-        <text>男方</text>
+
+        <!-- 第5行：桌13 + 桌14 + 空 + 桌15 + 桌16 -->
+        <view class="hall-row">
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[12].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[12].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[12].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[13].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[13].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[13].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[14].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[14].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[14].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[15].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[15].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[15].guestTypeName}}</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 第6行：桌17 + 桌18 + 空 + 桌19 + 桌20 -->
+        <view class="hall-row">
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[16].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[16].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[16].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[17].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[17].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[17].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell empty"></view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[18].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[18].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[18].guestTypeName}}</view>
+            </view>
+          </view>
+          <view class="grid-cell table-cell">
+            <view class="table-item {{allTables[19].guestType}}">
+              <view class="table-circle">
+                <text class="table-number">{{allTables[19].tableNum}}</text>
+              </view>
+              <view class="table-label">{{allTables[19].guestTypeName}}</view>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 提交按钮 -->
-  <view class="submit-container" wx:if="{{!mySeat && selectedSeat}}">
-    <button class="submit-btn" bindtap="onSubmit">确认选座</button>
+  <!-- 图例说明 -->
+  <view class="legend-card">
+    <view class="legend-title">宾客类型</view>
+    <view class="legend-list">
+      <view class="legend-item">
+        <view class="legend-dot bride-family"></view>
+        <text>女方亲友</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot father-friends"></view>
+        <text>父亲朋友</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot classmate"></view>
+        <text>男方同学</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot mother-friends"></view>
+        <text>母亲朋友</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot relatives"></view>
+        <text>亲人</text>
+      </view>
+    </view>
   </view>
 </view>
