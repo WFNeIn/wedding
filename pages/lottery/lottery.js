@@ -167,6 +167,10 @@ Page({
       })
       .catch(err => {
         console.error('查询中奖状态失败:', err);
+        // 如果是集合不存在的错误，静默处理
+        if (err.errCode === -502005) {
+          console.log('lottery_prizes 集合尚未创建，请在云开发控制台创建该集合');
+        }
       });
   },
 

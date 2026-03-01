@@ -25,48 +25,31 @@
         
         <!-- 信封内容区域 -->
         <view class="envelope-content">
-          <!-- 顶部装饰线 -->
-          <view class="envelope-decoration-top">
-            <view class="decoration-line"></view>
-            <view class="decoration-pattern">❖</view>
-            <view class="decoration-line"></view>
-          </view>
-          
-          <!-- 中央主要内容 -->
-          <view class="envelope-main-content">
-            <!-- 新人名字 -->
-            <view class="envelope-couple">
-              <text class="couple-name-large">{{groomName}}</text>
-              <text class="couple-separator-large">&</text>
-              <text class="couple-name-large">{{brideName}}</text>
-            </view>
-            
-            <!-- 婚礼标题 -->
-            <view class="envelope-title">
-              <text class="title-text">婚礼邀请函</text>
-            </view>
-            
-            <!-- 日期 -->
-            <view class="envelope-date">
-              <text class="date-value">{{weddingDateDisplay}}</text>
-            </view>
-          </view>
-          
-          <!-- 底部装饰线 -->
-          <view class="envelope-decoration-bottom">
-            <view class="decoration-line"></view>
-            <view class="decoration-pattern">❖</view>
-            <view class="decoration-line"></view>
-          </view>
+          <!-- 空白信封，只显示印章 -->
         </view>
         
         <!-- 印章封条 -->
         <view class="seal-wrapper {{openingStep >= 1 ? 'broken' : ''}}">
           <view class="seal-stamp">
             <view class="seal-border">
+              <!-- 装饰花纹 -->
+              <view class="seal-decoration">
+                <!-- 马的图案 -->
+                <view class="horse-pattern">
+                  <text class="horse-emoji">🐴</text>
+                </view>
+                <!-- 装饰星光 -->
+                <text class="decoration-sparkle decoration-1">✦</text>
+                <text class="decoration-sparkle decoration-2">✦</text>
+                <text class="decoration-sparkle decoration-3">✧</text>
+                <text class="decoration-sparkle decoration-4">✧</text>
+              </view>
+              <!-- 内容 -->
               <view class="seal-content">
-                <text class="seal-text-top">囍</text>
-                <text class="seal-text-bottom">请柬</text>
+                <text class="seal-divider-top">———</text>
+                <text class="seal-text-top">W & Y</text>
+                <text class="seal-text-bottom">WEDDING</text>
+                <text class="seal-divider-bottom">———</text>
               </view>
             </view>
           </view>

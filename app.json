@@ -25,25 +25,25 @@
         "pagePath": "pages/index/index",
         "text": "首页",
         "iconPath": "images/tabbar/home.png",
-        "selectedIconPath": "images/tabbar/home.png"
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/seat/seat",
+        "text": "坐席安排",
+        "iconPath": "images/tabbar/seat.png",
+        "selectedIconPath": "images/tabbar/seat-active.png"
       },
       {
         "pagePath": "pages/rsvp/rsvp",
         "text": "回执",
         "iconPath": "images/tabbar/rsvp.png",
-        "selectedIconPath": "images/tabbar/rsvp.png"
+        "selectedIconPath": "images/tabbar/rsvp-active.png"
       },
       {
         "pagePath": "pages/blessings/blessings",
         "text": "祝福",
         "iconPath": "images/tabbar/blessings.png",
-        "selectedIconPath": "images/tabbar/blessings.png"
-      },
-      {
-        "pagePath": "pages/seat/seat",
-        "text": "座位安排",
-        "iconPath": "images/tabbar/seat.png",
-        "selectedIconPath": "images/tabbar/seat.png"
+        "selectedIconPath": "images/tabbar/blessings-active.png"
       }
     ]
   },
