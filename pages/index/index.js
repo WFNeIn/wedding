@@ -104,12 +104,12 @@ Page({
     // 步骤1: 立即拆开印章
     this.setData({ openingStep: 1 });
     
-    // 步骤2: 1.2秒后展开信件内容
+    // 步骤2: 0.6秒后展开信件内容（缩短等待时间）
     setTimeout(() => {
       this.setData({ openingStep: 2 });
-    }, 1200);
+    }, 600);
     
-    // 步骤3: 4秒后隐藏整个动画，进入首页
+    // 步骤3: 2.5秒后隐藏整个动画，进入首页（总共3.1秒）
     setTimeout(() => {
       this.setData({ 
         showOpening: false,
@@ -119,7 +119,7 @@ Page({
       wx.showTabBar({
         animation: true
       });
-    }, 4000);
+    }, 2500);
   },
 
   /**
@@ -353,9 +353,10 @@ Page({
       .get()
       .then(res => {
         if (res.data && res.data.length > 0) {
-          // 有真实祝福数据
+          // 有真实祝福数据，进行质量筛选
+          const qualityBlessings = this.filterQualityBlessings(res.data.map(item => item.content));
           this.setData({
-            blessings: res.data.map(item => item.content)
+            blessings: qualityBlessings
           });
         } else {
           // 没有数据，使用模拟数据
@@ -373,61 +374,171 @@ Page({
   },
 
   /**
-   * 生成模拟祝福数据（50条）
+   * 筛选高质量祝福语
+   * 评分标准：
+   * 1. 长度：10-50字为最佳（+3分），50-100字（+2分），<10字或>100字（0分）
+   * 2. 包含祝福关键词（+2分）
+   * 3. 包含情感词汇（+1分）
+   * 4. 包含标点符号（+1分，说明有结构）
+   * 5. 去重：相似度过高的只保留一条
+   */
+  filterQualityBlessings(blessings) {
+    // 祝福关键词
+    const blessingKeywords = [
+      '祝福', '恭喜', '幸福', '美满', '快乐', '甜蜜', '永远', '百年好合', 
+      '白头偕老', '天长地久', '相爱', '恩爱', '美好', '圆满', '喜结良缘',
+      '早生贵子', '琴瑟和鸣', '相濡以沫', '执子之手', '佳偶天成'
+    ];
+    
+    // 情感词汇
+    const emotionWords = [
+      '爱', '真心', '祝愿', '期待', '见证', '感动', '温暖', '浪漫',
+      '珍惜', '守护', '陪伴', '一生', '一世', '永恒', '真诚'
+    ];
+
+    // 1. 过滤掉少于10个字的祝福
+    let filteredBlessings = blessings.filter(blessing => {
+      const length = blessing.trim().length;
+      return length >= 10;
+    });
+
+    // 如果过滤后数量太少，放宽到8个字
+    if (filteredBlessings.length < 10) {
+      filteredBlessings = blessings.filter(blessing => blessing.trim().length >= 8);
+    }
+
+    // 2. 计算每条祝福的质量分数
+    const scoredBlessings = filteredBlessings.map(blessing => {
+      let score = 0;
+      const length = blessing.trim().length;
+      
+      // 长度评分
+      if (length >= 10 && length <= 50) {
+        score += 3;
+      } else if (length > 50 && length <= 100) {
+        score += 2;
+      }
+      
+      // 包含祝福关键词
+      const hasKeyword = blessingKeywords.some(keyword => blessing.includes(keyword));
+      if (hasKeyword) {
+        score += 2;
+      }
+      
+      // 包含情感词汇
+      const hasEmotion = emotionWords.some(word => blessing.includes(word));
+      if (hasEmotion) {
+        score += 1;
+      }
+      
+      // 包含标点符号（说明有结构）
+      const hasPunctuation = /[，。！？、；：""''（）【】《》]/.test(blessing);
+      if (hasPunctuation) {
+        score += 1;
+      }
+      
+      // 避免纯重复字符
+      const hasRepeat = /(.)\1{4,}/.test(blessing);
+      if (hasRepeat) {
+        score -= 2;
+      }
+      
+      return {
+        content: blessing,
+        score: score
+      };
+    });
+
+    // 3. 按分数排序，取前50条
+    scoredBlessings.sort((a, b) => b.score - a.score);
+    let topBlessings = scoredBlessings.slice(0, 50);
+
+    // 4. 去重：移除相似度过高的祝福
+    const uniqueBlessings = [];
+    for (let i = 0; i < topBlessings.length; i++) {
+      const current = topBlessings[i].content;
+      let isDuplicate = false;
+      
+      for (let j = 0; j < uniqueBlessings.length; j++) {
+        const similarity = this.calculateSimilarity(current, uniqueBlessings[j]);
+        if (similarity > 0.7) { // 相似度超过70%认为是重复
+          isDuplicate = true;
+          break;
+        }
+      }
+      
+      if (!isDuplicate) {
+        uniqueBlessings.push(current);
+      }
+      
+      // 保留至少20条
+      if (uniqueBlessings.length >= 30) {
+        break;
+      }
+    }
+
+    console.log(`祝福筛选：原始${blessings.length}条 → 过滤后${filteredBlessings.length}条 → 高质量${uniqueBlessings.length}条`);
+    
+    // 如果筛选后数量太少，补充一些模拟数据
+    if (uniqueBlessings.length < 10) {
+      const mockBlessings = this.getHighQualityMockBlessings();
+      return [...uniqueBlessings, ...mockBlessings].slice(0, 30);
+    }
+    
+    return uniqueBlessings;
+  },
+
+  /**
+   * 计算两个字符串的相似度（简单版本）
+   */
+  calculateSimilarity(str1, str2) {
+    const len1 = str1.length;
+    const len2 = str2.length;
+    const maxLen = Math.max(len1, len2);
+    
+    if (maxLen === 0) return 1.0;
+    
+    // 计算相同字符的数量
+    let sameChars = 0;
+    const minLen = Math.min(len1, len2);
+    
+    for (let i = 0; i < minLen; i++) {
+      if (str1[i] === str2[i]) {
+        sameChars++;
+      }
+    }
+    
+    return sameChars / maxLen;
+  },
+
+  /**
+   * 获取高质量的模拟祝福数据
+   */
+  getHighQualityMockBlessings() {
+    return [
+      '祝你们新婚快乐，百年好合，永远幸福美满！',
+      '愿你们的爱情天长地久，白头偕老，相濡以沫！',
+      '恭喜你们喜结良缘，祝福你们恩爱有加，早生贵子！',
+      '祝福新人，琴瑟和鸣，相亲相爱，幸福一生！',
+      '愿你们执子之手，与子偕老，永远相爱相守！',
+      '恭祝百年好合，永浴爱河，佳偶天成！',
+      '祝你们新婚大喜，甜甜蜜蜜，花好月圆！',
+      '愿你们的婚姻美满幸福，爱情甜蜜长久！',
+      '祝福你们，相知相守，恩爱永久，幸福美满！',
+      '恭喜新婚，祝你们永远快乐，真心相爱一辈子！',
+      '愿你们珍惜彼此，携手共度美好人生！',
+      '祝福新人，天作之合，鸾凤和鸣，永结同心！',
+      '恭祝新婚愉快，愿你们的爱情永远浪漫温馨！',
+      '祝你们相亲相爱，幸福美满，白头到老！',
+      '愿你们的婚姻充满欢笑，生活充满阳光！'
+    ];
+  },
+
+  /**
+   * 生成模拟祝福数据（高质量版本）
    */
   generateMockBlessings() {
-    const mockBlessings = [
-      '祝新婚快乐，百年好合！',
-      '愿你们永远幸福美满！',
-      '恭喜恭喜，白头偕老！',
-      '祝福新人，早生贵子！',
-      '新婚大喜，甜甜蜜蜜！',
-      '执子之手，与子偕老！',
-      '天作之合，佳偶天成！',
-      '相亲相爱，幸福一生！',
-      '琴瑟和鸣，鸾凤和鸣！',
-      '花好月圆，永结同心！',
-      '祝你们新婚愉快，幸福美满！',
-      '愿爱情甜蜜，婚姻美满！',
-      '恭祝百年好合，永浴爱河！',
-      '祝福你们，白头到老！',
-      '新婚快乐，永远幸福！',
-      '祝两位新人，恩爱有加！',
-      '愿你们的爱情，天长地久！',
-      '祝福新婚，美满幸福！',
-      '恭喜你们，喜结良缘！',
-      '祝新人，幸福美满！',
-      '愿你们相濡以沫，恩爱永久！',
-      '祝福你们，永远快乐！',
-      '新婚大吉，百年好合！',
-      '祝你们，幸福一生！',
-      '恭喜新婚，甜蜜美满！',
-      '愿你们的婚姻，幸福长久！',
-      '祝福新人，永远相爱！',
-      '新婚快乐，早生贵子！',
-      '祝你们，白头偕老！',
-      '恭喜恭喜，幸福美满！',
-      '愿你们，永远幸福！',
-      '祝新婚愉快，恩爱有加！',
-      '恭祝新婚，百年好合！',
-      '祝福你们，甜甜蜜蜜！',
-      '新婚大喜，永浴爱河！',
-      '愿你们，相亲相爱！',
-      '祝新人，幸福快乐！',
-      '恭喜新婚，天长地久！',
-      '祝福你们，美满幸福！',
-      '新婚快乐，永结同心！',
-      '愿你们，恩爱一生！',
-      '祝新婚，幸福美满！',
-      '恭喜你们，喜结连理！',
-      '祝福新人，永远快乐！',
-      '新婚大吉，甜蜜幸福！',
-      '愿你们，白头到老！',
-      '祝新婚愉快，百年好合！',
-      '恭祝新人，幸福一生！',
-      '祝福你们，永远相爱！',
-      '新婚快乐，恩爱永久！'
-    ];
+    const mockBlessings = this.getHighQualityMockBlessings();
     
     this.setData({
       blessings: mockBlessings
