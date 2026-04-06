@@ -32,3 +32,7 @@ cloudfunctions/**/node_modules/
 # 构建产物
 dist/
 build/
+wedding-web/deploy.py
+wedding-web/gen-urls.py
+wedding-web/api.py
+wedding-web/scf/

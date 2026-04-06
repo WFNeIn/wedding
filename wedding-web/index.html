@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>王峰 & 杨丽琴 · 婚礼邀请函</title>
+  <meta name="description" content="我们诚挚邀请您见证爱情 — 2026年5月4日">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF; --text: #0C0C0C; --sec: #53565A; --accent: #2361FF;
+      --rule: #E7E7E7; --strip: #F5F5F5; --footer-bg: #FAFAFA;
+      --sans: 'Libre Franklin','PingFang SC','Microsoft YaHei',sans-serif;
+      --serif: 'Playfair Display','Noto Serif SC',Georgia,serif;
+      --xl: 120px; --lg: 80px; --md: 56px; --sm: 32px; --xs: 16px;
+      --max-w: 1080px; --ease: cubic-bezier(.25,.46,.45,.94);
+    }
+    @media(max-width:767px){
+      :root{ --xl:56px; --lg:40px; --md:32px; --sm:24px; }
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);line-height:1.75;letter-spacing:.02em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    img{display:block;max-width:100%;height:auto}
+    a{color:var(--accent);text-decoration:none;transition:opacity .3s var(--ease)}
+    a:hover{opacity:.7}
+    a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--sm)}
+
+    /* ===== Header ===== */
+    .hdr{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px var(--sm);display:flex;align-items:center;justify-content:space-between;transition:background .4s var(--ease),box-shadow .4s var(--ease)}
+    .hdr.scrolled{background:rgba(255,255,255,.97);box-shadow:0 1px 0 var(--rule)}
+    .logo{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--text);letter-spacing:.05em;transition:color .3s}
+    .hdr:not(.scrolled) .logo{color:#fff}
+    .mbtn{width:28px;height:20px;position:relative;cursor:pointer;background:none;border:none;padding:0;z-index:200}
+    .mbtn span{display:block;width:100%;height:1.5px;background:var(--text);position:absolute;left:0;transition:all .35s var(--ease)}
+    .hdr:not(.scrolled) .mbtn span{background:#fff}
+    .mbtn span:nth-child(1){top:0}
+    .mbtn span:nth-child(2){top:50%;transform:translateY(-50%)}
+    .mbtn span:nth-child(3){bottom:0}
+    .mbtn.active span:nth-child(1){top:50%;transform:translateY(-50%) rotate(45deg);background:#fff}
+    .mbtn.active span:nth-child(2){opacity:0}
+    .mbtn.active span:nth-child(3){bottom:50%;transform:translateY(50%) rotate(-45deg);background:#fff}
+    .ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:140;opacity:0;pointer-events:none;transition:opacity .4s}
+    .ov.vis{opacity:1;pointer-events:auto}
+    .smenu{position:fixed;top:0;right:0;width:100%;max-width:420px;height:100vh;background:var(--text);color:#fff;z-index:150;transform:translateX(100%);transition:transform .5s var(--ease);display:flex;flex-direction:column;justify-content:center;padding:0 var(--md)}
+    .smenu.open{transform:translateX(0)}
+    .smenu nav a{display:block;font-family:var(--serif);font-size:28px;color:#fff;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.1);letter-spacing:.04em;transition:padding-left .3s var(--ease)}
+    .smenu nav a:hover{padding-left:12px;opacity:1}
+
+    /* ===== Hero ===== */
+    .hero{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;display:flex;align-items:center}
+    .hero-bg{position:absolute;inset:0;background:url('https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7224-web.jpg') center 20%/cover no-repeat;filter:brightness(.55)}
+    .hero-content{position:relative;z-index:2;padding-left:max(var(--sm), calc((100vw - var(--max-w))/2 + var(--sm)));color:#fff;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease) .2s forwards}
+    .hero h1{font-family:var(--serif);font-size:clamp(40px,7vw,72px);font-weight:500;line-height:1.15;letter-spacing:.03em;margin-bottom:16px}
+    .hero-sub{font-size:clamp(16px,2.5vw,22px);font-weight:300;letter-spacing:.08em;opacity:.85}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+    /* ===== Scroll Reveal ===== */
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ===== About ===== */
+    .about{padding:var(--xl) 0}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--lg);align-items:start}
+    @media(max-width:767px){.about-grid{grid-template-columns:1fr}}
+    .about-card{text-align:center}
+    .about-card .portrait{width:100%;max-width:420px;aspect-ratio:3/4;object-fit:cover;object-position:center 20%;margin:0 auto var(--sm);filter:grayscale(.15);image-rendering:auto}
+    @media(max-width:767px){.about-card .portrait{max-width:320px}}
+    .sc-heading{font-family:var(--serif);font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--sec);margin-bottom:var(--xs)}
+    .about-card h3{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:12px}
+    .about-card p{max-width:400px;margin:0 auto;color:var(--sec);font-size:16px;line-height:1.85}
+
+    /* ===== Details ===== */
+    .details{padding:var(--xl) 0;text-align:center}
+    .details hr{border:none;height:1px;background:var(--rule);margin:var(--sm) auto;max-width:480px}
+    .big-date{font-family:var(--serif);font-size:clamp(48px,8vw,72px);font-weight:400;letter-spacing:.06em;color:var(--text)}
+    .venue-name{font-size:20px;font-weight:400;margin-top:12px}
+    .venue-addr{font-size:16px;color:var(--sec);margin-top:8px;line-height:1.6}
+    .map-link{display:inline-block;margin-top:var(--sm);font-size:14px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--accent)}
+
+    /* ===== Schedule ===== */
+    .schedule{padding:var(--xl) 0}
+    .schedule .sc-heading{text-align:center;margin-bottom:var(--lg)}
+    .timeline{max-width:560px;margin:0 auto;position:relative;padding-left:40px}
+    .timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:var(--rule)}
+    .tl-item{position:relative;margin-bottom:var(--sm)}
+    .tl-item::before{content:'';position:absolute;left:-33px;top:10px;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--text);background:var(--bg)}
+    .tl-time{font-family:var(--serif);font-size:24px;font-weight:500;margin-bottom:4px}
+    .tl-event{font-size:16px;color:var(--sec)}
+
+    /* ===== RSVP ===== */
+    .rsvp-strip{background:var(--strip);padding:var(--lg) 0;text-align:center}
+    .rsvp-strip .sc-heading{margin-bottom:8px}
+    .rsvp-strip p{color:var(--sec);font-size:16px;margin-bottom:var(--sm)}
+    .rsvp-btn{display:inline-block;width:240px;height:48px;line-height:48px;font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text);border:2px solid var(--text);background:transparent;cursor:pointer;transition:all .3s var(--ease)}
+    .rsvp-btn:hover{background:var(--text);color:#fff}
+    .rsvp-btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+    /* ===== RSVP Modal ===== */
+    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;opacity:0;pointer-events:none;transition:opacity .35s;display:flex;align-items:center;justify-content:center}
+    .modal-ov.show{opacity:1;pointer-events:auto}
+    .modal{background:#fff;width:90%;max-width:480px;padding:var(--lg) var(--sm);position:relative;transform:translateY(20px);transition:transform .4s var(--ease)}
+    .modal-ov.show .modal{transform:translateY(0)}
+    .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--sec);line-height:1}
+    .modal h2{font-family:var(--serif);font-size:24px;font-weight:500;text-align:center;margin-bottom:var(--sm)}
+    .field{margin-bottom:20px}
+    .field label{display:block;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--sec);margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;padding:10px 0;font-family:var(--sans);font-size:16px;border:none;border-bottom:1px solid var(--rule);background:transparent;color:var(--text);outline:none;transition:border-color .3s}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--text)}
+    .field textarea{resize:vertical;min-height:60px}
+    .submit-btn{width:100%;height:48px;font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:2px solid var(--text);background:var(--text);color:#fff;cursor:pointer;transition:all .3s var(--ease);margin-top:8px}
+    .submit-btn:hover{background:transparent;color:var(--text)}
+    .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:12px 32px;font-size:14px;letter-spacing:.04em;opacity:0;transition:all .4s var(--ease);z-index:400;pointer-events:none}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    /* ===== Footer ===== */
+    .footer{background:var(--footer-bg);padding:var(--md) 0;text-align:center}
+    .footer-links{font-size:14px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--sec);margin-bottom:12px}
+    .footer-links a{color:var(--sec);margin:0 12px}
+    .footer-links a:hover{color:var(--text)}
+    .footer small{display:block;font-size:12px;color:var(--sec);letter-spacing:.04em}
+
+    /* ===== Welcome Overlay ===== */
+    .welcome-ov{position:fixed;inset:0;z-index:500;background:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:opacity .6s var(--ease)}
+    .welcome-ov.hide{opacity:0;pointer-events:none}
+    .welcome-ov .wl-names{font-family:var(--serif);font-size:clamp(28px,5vw,48px);font-weight:400;letter-spacing:.06em;margin-bottom:12px}
+    .welcome-ov .wl-date{font-size:14px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;opacity:.6;margin-bottom:40px}
+    .welcome-ov .wl-enter{font-size:13px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.4);padding:10px 32px;transition:all .3s var(--ease)}
+    .welcome-ov .wl-enter:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+
+    /* ===== Music Button ===== */
+    .music-btn{position:fixed;bottom:28px;right:28px;z-index:90;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--rule);background:rgba(255,255,255,.85);backdrop-filter:blur(8px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease)}
+    .music-btn:hover{border-color:var(--text);background:#fff}
+    .music-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    .music-btn svg{width:18px;height:18px;fill:none;stroke:var(--text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .music-btn .bar{transform-origin:bottom;animation:none}
+    .music-btn.playing .bar{animation:eqBar .8s ease-in-out infinite alternate}
+    .music-btn.playing .bar:nth-child(2){animation-delay:.2s}
+    .music-btn.playing .bar:nth-child(3){animation-delay:.4s}
+    @keyframes eqBar{0%{transform:scaleY(.3)}100%{transform:scaleY(1)}}
+
+    /* ===== Reduced Motion ===== */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+      .reveal{opacity:1;transform:none}
+      .hero-content{opacity:1;transform:none;animation:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Overlay -->
+  <div class="welcome-ov" id="welcomeOv" role="dialog" aria-label="欢迎">
+    <div class="wl-names">王峰 & 杨丽琴</div>
+    <div class="wl-date">2026 · 05 · 04</div>
+    <div class="wl-enter">点击进入</div>
+  </div>
+
+  <!-- Header -->
+  <header class="hdr" role="banner">
+    <a href="#" class="logo" aria-label="返回顶部">W & Y</a>
+    <button class="mbtn" aria-label="打开菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+  <div class="ov" aria-hidden="true"></div>
+  <aside class="smenu" role="navigation" aria-label="主导航">
+    <nav>
+      <a href="#hero">首页</a>
+      <a href="#about">关于我们</a>
+      <a href="#details">时间与地点</a>
+      <a href="#schedule">婚礼流程</a>
+      <a href="#rsvp">出席回执</a>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" role="img" aria-label="新人合影"></div>
+      <div class="hero-content">
+        <h1>王峰 & 杨丽琴</h1>
+        <p class="hero-sub">我们诚挚邀请您见证爱情</p>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+      <div class="wrap">
+        <div class="about-grid">
+          <div class="about-card reveal">
+            <div class="sc-heading">他</div>
+            <img class="portrait" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7337-web.jpg" alt="新郎照片" loading="lazy">
+            <h3>王峰</h3>
+            <p>一个相信缘分的人，在最好的时光遇见了最对的你。愿以余生，与你共赴山海。</p>
+          </div>
+          <div class="about-card reveal">
+            <div class="sc-heading">她</div>
+            <img class="portrait" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7324-web.jpg" alt="新娘照片" loading="lazy">
+            <h3>杨丽琴</h3>
+            <p>从相识到相知，从相知到相爱。感谢命运让我们相遇，从此人生不再是一个人的旅途。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Details -->
+    <section class="details" id="details">
+      <div class="wrap reveal">
+        <hr>
+        <div class="big-date">05.04.2026</div>
+        <div class="venue-name">新城宴 · 5楼A厅（新城华府店）</div>
+        <div class="venue-addr">武汉市新洲区邾城街龙腾大道新城华府A4号楼</div>
+        <a class="map-link" href="https://uri.amap.com/marker?position=114.811298,30.826285&name=新城宴(新城华府店)" target="_blank" rel="noopener">查看地图</a>
+        <hr>
+      </div>
+    </section>
+
+    <!-- Schedule -->
+    <section class="schedule" id="schedule">
+      <div class="wrap">
+        <div class="sc-heading reveal">婚礼流程</div>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <div class="tl-time">11:00</div>
+            <div class="tl-event">迎宾签到 · 入座就位</div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-time">12:00</div>
+            <div class="tl-event">婚礼仪式 · 见证幸福</div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-time">12:30</div>
+            <div class="tl-event">喜宴开席 · 举杯同庆</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="rsvp-strip" id="rsvp">
+      <div class="wrap reveal">
+        <div class="sc-heading">出席回执</div>
+        <p>请于 2026 年 4 月 20 日前告知我们您是否出席</p>
+        <button class="rsvp-btn" id="openRsvp" type="button">RSVP</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- RSVP Modal -->
+  <div class="modal-ov" id="modalOv" role="dialog" aria-modal="true" aria-label="出席回执表单">
+    <div class="modal">
+      <button class="modal-close" id="closeModal" aria-label="关闭">&times;</button>
+      <h2>出席回执</h2>
+      <form id="rsvpForm" autocomplete="off">
+        <div class="field">
+          <label for="guestName">姓名</label>
+          <input type="text" id="guestName" name="name" required placeholder="请输入您的姓名">
+        </div>
+        <div class="field">
+          <label for="guestPhone">联系电话</label>
+          <input type="tel" id="guestPhone" name="phone" placeholder="请输入手机号码">
+        </div>
+        <div class="field">
+          <label for="guestCount">出席人数</label>
+          <select id="guestCount" name="count">
+            <option value="1">1 人</option>
+            <option value="2">2 人</option>
+            <option value="3">3 人</option>
+            <option value="4">4 人</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="guestMsg">祝福留言</label>
+          <textarea id="guestMsg" name="message" rows="2" placeholder="写下您的祝福（选填）"></textarea>
+        </div>
+        <button class="submit-btn" type="submit">提交回执</button>
+      </form>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <!-- 背景音乐 -->
+  <audio id="bgm" loop preload="auto" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/bgm.mp3"></audio>
+  <button class="music-btn" id="musicBtn" aria-label="播放/暂停背景音乐" title="背景音乐">
+    <svg viewBox="0 0 20 20">
+      <rect class="bar" x="3" y="6" width="3" height="14" rx="1"/>
+      <rect class="bar" x="9" y="2" width="3" height="18" rx="1"/>
+      <rect class="bar" x="15" y="8" width="3" height="12" rx="1"/>
+    </svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="mailto:example@email.com" aria-label="发送邮件">Email</a>
+      <span style="color:var(--rule)">|</span>
+      <a href="tel:13098812825" aria-label="拨打电话">电话联系</a>
+    </div>
+    <small>&copy; 2026 王峰 & 杨丽琴</small>
+  </footer>
+
+  <script>
+    /* ===== 背景音乐 ===== */
+    const bgm = document.getElementById('bgm');
+    const musicBtn = document.getElementById('musicBtn');
+    musicBtn.addEventListener('click', () => {
+      if (bgm.paused) {
+        bgm.play();
+        musicBtn.classList.add('playing');
+      } else {
+        bgm.pause();
+        musicBtn.classList.remove('playing');
+      }
+    });
+
+    /* ===== 欢迎遮罩 & 自动播放音乐 ===== */
+    const welcomeOv = document.getElementById('welcomeOv');
+    welcomeOv.addEventListener('click', () => {
+      welcomeOv.classList.add('hide');
+      bgm.play();
+      musicBtn.classList.add('playing');
+      setTimeout(() => welcomeOv.remove(), 600);
+    });
+
+    /* ===== 菜单 ===== */
+    const mbtn = document.querySelector('.mbtn');
+    const smenu = document.querySelector('.smenu');
+    const ov = document.querySelector('.ov');
+    function toggleMenu(open) {
+      const isOpen = typeof open === 'boolean' ? open : !smenu.classList.contains('open');
+      smenu.classList.toggle('open', isOpen);
+      ov.classList.toggle('vis', isOpen);
+      mbtn.classList.toggle('active', isOpen);
+      mbtn.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+    mbtn.addEventListener('click', () => toggleMenu());
+    ov.addEventListener('click', () => toggleMenu(false));
+    smenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+    /* ===== Header 滚动 ===== */
+    const hdr = document.querySelector('.hdr');
+    window.addEventListener('scroll', () => {
+      hdr.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* ===== Scroll Reveal ===== */
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 100);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => io.observe(el));
+
+    /* ===== RSVP Modal ===== */
+    const modalOv = document.getElementById('modalOv');
+    const closeModal = document.getElementById('closeModal');
+    document.getElementById('openRsvp').addEventListener('click', () => {
+      modalOv.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    });
+    function hideModal() {
+      modalOv.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    closeModal.addEventListener('click', hideModal);
+    modalOv.addEventListener('click', (e) => { if (e.target === modalOv) hideModal(); });
+
+    /* ===== Toast ===== */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    /* ===== Form Submit ===== */
+    const COS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=90ca1885fa65c441bd5fac493aef0c9962672315';
+    const COS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=5e95d11dfb2e926955b7b3cf50ed030ab16c1706';
+
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const entry = Object.fromEntries(fd);
+      entry.id = String(Date.now());
+      entry.time = new Date().toLocaleString('zh-CN');
+      hideModal();
+      e.target.reset();
+      try {
+        // 读取现有数据
+        const res = await fetch(COS_GET);
+        const list = res.ok ? await res.json() : [];
+        list.push(entry);
+        // 写回 COS
+        await fetch(COS_PUT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(list),
+        });
+      } catch (_) {
+        // 回退 localStorage
+        const list = JSON.parse(localStorage.getItem('wedding_rsvp') || '[]');
+        list.push(entry);
+        localStorage.setItem('wedding_rsvp', JSON.stringify(list));
+      }
+      showToast('感谢您的回复，我们期待与您相见 ♥');
+    });
+  </script>
+</body>
+</html>
