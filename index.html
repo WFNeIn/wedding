@@ -199,14 +199,6 @@
     .welcome-ov .wl-enter:hover{border-color:#fff;background:rgba(255,255,255,.1)}
     @keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
 
-    /* ===== Page Loading ===== */
-    .page-loader{position:fixed;inset:0;z-index:600;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .4s var(--ease)}
-    .page-loader.done{opacity:0;pointer-events:none}
-    .loader-dot{width:6px;height:6px;border-radius:50%;background:var(--text);margin:0 4px;animation:loaderBounce .6s ease-in-out infinite alternate}
-    .loader-dot:nth-child(2){animation-delay:.2s}
-    .loader-dot:nth-child(3){animation-delay:.4s}
-    @keyframes loaderBounce{to{opacity:.2;transform:translateY(-8px)}}
-
     /* ===== Share Button ===== */
     .share-btn{position:fixed;bottom:28px;right:80px;z-index:90;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--rule);background:rgba(255,255,255,.85);backdrop-filter:blur(8px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease)}
     .share-btn:hover{border-color:var(--text);background:#fff}
@@ -259,11 +251,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Page Loader -->
-  <div class="page-loader" id="pageLoader">
-    <div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div>
-  </div>
 
   <!-- Welcome Overlay -->
   <div class="welcome-ov" id="welcomeOv" role="dialog" aria-label="欢迎">
@@ -526,11 +513,6 @@
   </footer>
 
   <script>
-    /* ===== 页面加载 ===== */
-    // DOM就绪即隐藏loading，不等图片和音乐
-    document.getElementById('pageLoader').classList.add('done');
-    setTimeout(() => document.getElementById('pageLoader').remove(), 500);
-
     /* ===== 微信环境检测 ===== */
     const isWechat = /MicroMessenger/i.test(navigator.userAgent);
 
