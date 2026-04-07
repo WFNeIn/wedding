@@ -104,8 +104,15 @@
     async function render() {
       const data = await load();
       const total = data.reduce((s, d) => s + Number(d.count || 1), 0);
+      const yes = data.filter(d => !d.attend || d.attend === 'yes');
+      const maybe = data.filter(d => d.attend === 'maybe');
+      const no = data.filter(d => d.attend === 'no');
+      const yesCount = yes.reduce((s, d) => s + Number(d.count || 1), 0);
+      const maybeCount = maybe.reduce((s, d) => s + Number(d.count || 1), 0);
+      const noCount = no.reduce((s, d) => s + Number(d.count || 1), 0);
       document.getElementById('summary').innerHTML =
-        `共 <span>${data.length}</span> 条回执，预计出席 <span>${total}</span> 人`;
+        `共 <span>${data.length}</span> 条回执，预计出席 <span>${total}</span> 人<br>` +
+        `出席 <span>${yesCount}</span> 人 · 待定 <span>${maybeCount}</span> 人 · 不出席 <span>${noCount}</span> 人`;
       const listEl = document.getElementById('list');
       if (!data.length) {
         listEl.innerHTML = '<div class="empty">暂无回执数据</div>';
@@ -118,7 +125,7 @@
             <span class="card-time">${esc(d.time || '')}</span>
           </div>
           <div class="card-info">
-            电话：${esc(d.phone || '未填写')} &nbsp;|&nbsp; 人数：${esc(d.count || '1')} 人
+            电话：${esc(d.phone || '未填写')} &nbsp;|&nbsp; 人数：${esc(d.count || '1')} 人 &nbsp;|&nbsp; ${d.attend === 'no' ? '不出席' : d.attend === 'maybe' ? '待定' : '出席'}
           </div>
           ${d.message ? `<div class="card-msg">"${esc(d.message)}"</div>` : ''}
         </div>
@@ -133,9 +140,9 @@
     document.getElementById('exportBtn').addEventListener('click', () => {
       const data = rsvpData;
       if (!data.length) return alert('暂无数据');
-      const header = '姓名,电话,人数,祝福,提交时间\n';
+      const header = '姓名,电话,人数,是否出席,祝福,提交时间\n';
       const rows = data.map(d =>
-        [d.name, d.phone, d.count, d.message, d.time].map(v => `"${(v||'').replace(/"/g,'""')}"`).join(',')
+        [d.name, d.phone, d.count, d.attend === 'no' ? '不出席' : d.attend === 'maybe' ? '待定' : '出席', d.message, d.time].map(v => `"${(v||'').replace(/"/g,'""')}"`).join(',')
       ).join('\n');
       const blob = new Blob(['\uFEFF' + header + rows], { type: 'text/csv;charset=utf-8' });
       const a = document.createElement('a');
