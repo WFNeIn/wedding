@@ -111,6 +111,8 @@
     .st-title{font-size:15px;font-weight:400;margin-bottom:6px}
     .st-desc{font-size:14px;color:var(--sec);line-height:1.75}
     .st-img{width:100%;max-width:280px;aspect-ratio:4/3;object-fit:cover;margin-top:12px;filter:grayscale(.1)}
+    .st-imgs{display:flex;gap:8px;margin-top:12px}
+    .st-imgs .st-img{margin-top:0;flex:1;max-width:none}
     .st-item:nth-child(odd) .st-img{margin-left:auto}
     @media(max-width:767px){.st-item:nth-child(odd) .st-img{margin-left:0}}
 
@@ -328,7 +330,10 @@
               <div class="st-date">2025 · 九月</div>
               <div class="st-title">确定关系</div>
               <div class="st-desc">从相识到心动不过一个月，九月底我们正式在一起了。</div>
-              <img class="st-img" src="images/story-together.jpg" alt="确定关系" loading="lazy">
+              <div class="st-imgs">
+                <img class="st-img" src="images/story-together.jpg" alt="确定关系" loading="lazy">
+                <img class="st-img" src="images/story-together2.jpg" alt="在一起" loading="lazy">
+              </div>
             </div>
           </div>
           <div class="st-item reveal">
@@ -337,7 +342,10 @@
               <div class="st-date">2025 · 国庆</div>
               <div class="st-title">第一次旅行</div>
               <div class="st-desc">一起去了郑州，第一次旅行，每一步都是新鲜的风景。</div>
-              <img class="st-img" src="images/story-travel.jpg" alt="郑州旅行" loading="lazy">
+              <div class="st-imgs">
+                <img class="st-img" src="images/story-travel.jpg" alt="郑州旅行" loading="lazy">
+                <img class="st-img" src="images/story-travel2.jpg" alt="旅行合照" loading="lazy">
+              </div>
             </div>
           </div>
           <div class="st-item reveal">
