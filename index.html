@@ -527,10 +527,9 @@
 
   <script>
     /* ===== 页面加载 ===== */
-    window.addEventListener('load', () => {
-      document.getElementById('pageLoader').classList.add('done');
-      setTimeout(() => document.getElementById('pageLoader').remove(), 500);
-    });
+    // DOM就绪即隐藏loading，不等图片和音乐
+    document.getElementById('pageLoader').classList.add('done');
+    setTimeout(() => document.getElementById('pageLoader').remove(), 500);
 
     /* ===== 微信环境检测 ===== */
     const isWechat = /MicroMessenger/i.test(navigator.userAgent);
