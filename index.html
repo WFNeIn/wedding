@@ -88,35 +88,6 @@
     .about-card h3{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:12px}
     .about-card p{max-width:400px;margin:0 auto;color:var(--sec);font-size:16px;line-height:1.85}
 
-    /* ===== Love Story Timeline ===== */
-    .story{padding:var(--xl) 0;background:var(--strip)}
-    .story .sc-heading{text-align:center;margin-bottom:var(--lg)}
-    .story-tl{max-width:680px;margin:0 auto;position:relative;padding-left:0}
-    .story-tl::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--rule);transform:translateX(-50%)}
-    @media(max-width:767px){.story-tl::before{left:20px;transform:none}}
-    .st-item{position:relative;display:flex;align-items:flex-start;margin-bottom:var(--lg)}
-    .st-item:last-child{margin-bottom:0}
-    /* 奇偶交替布局 */
-    .st-item:nth-child(odd){flex-direction:row-reverse;text-align:right}
-    .st-item:nth-child(even){text-align:left}
-    @media(max-width:767px){
-      .st-item,.st-item:nth-child(odd){flex-direction:row;text-align:left}
-      .st-item{padding-left:48px}
-    }
-    .st-dot{position:absolute;left:50%;top:6px;width:10px;height:10px;border-radius:50%;border:2px solid var(--text);background:var(--bg);transform:translateX(-50%);z-index:2}
-    @media(max-width:767px){.st-dot{left:20px}}
-    .st-content{width:calc(50% - 32px);padding:0 8px}
-    @media(max-width:767px){.st-content{width:100%;padding:0}}
-    .st-date{font-family:var(--serif);font-size:18px;font-weight:500;margin-bottom:4px}
-    .st-title{font-size:15px;font-weight:400;margin-bottom:6px}
-    .st-desc{font-size:14px;color:var(--sec);line-height:1.75}
-    .st-img{width:100%;max-width:280px;aspect-ratio:4/3;object-fit:cover;margin-top:12px;filter:grayscale(.1)}
-    .st-imgs{display:flex;gap:8px;margin-top:12px}
-    .st-imgs .st-img{margin-top:0;flex:1;max-width:none;min-width:0}
-    @media(max-width:767px){.st-imgs{flex-direction:column}.st-imgs .st-img{max-width:280px}}
-    .st-item:nth-child(odd) .st-img{margin-left:auto}
-    @media(max-width:767px){.st-item:nth-child(odd) .st-img{margin-left:0}}
-
     /* ===== Details ===== */
     .details{padding:var(--xl) 0;text-align:center}
     .details hr{border:none;height:1px;background:var(--rule);margin:var(--sm) auto;max-width:480px}
@@ -275,7 +246,6 @@
     <nav>
       <a href="#hero">首页</a>
       <a href="#about">关于我们</a>
-      <a href="#story">我们的故事</a>
       <a href="#details">时间与地点</a>
       <a href="#schedule">婚礼流程</a>
       <a href="#blessings">祝福墙</a>
@@ -308,65 +278,6 @@
             <img class="portrait" src="images/DSCF7324-web.jpg" alt="新娘照片" loading="lazy">
             <h3>杨丽琴</h3>
             <p>从相识到相知，从相知到相爱。感谢命运让我们相遇，从此人生不再是一个人的旅途。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Love Story -->
-    <section class="story" id="story">
-      <div class="wrap">
-        <div class="sc-heading reveal">我们的故事</div>
-        <div class="story-tl">
-          <div class="st-item reveal">
-            <div class="st-dot"></div>
-            <div class="st-content">
-              <div class="st-date">2025 · 八月</div>
-              <div class="st-title">初次相遇</div>
-              <div class="st-desc">八月下旬的一次相遇，从此生命里多了一个特别的人。</div>
-              <img class="st-img" src="images/story-meet.jpg" alt="初次相遇" loading="lazy">
-            </div>
-          </div>
-          <div class="st-item reveal">
-            <div class="st-dot"></div>
-            <div class="st-content">
-              <div class="st-date">2025 · 九月</div>
-              <div class="st-title">确定关系</div>
-              <div class="st-desc">从相识到心动不过一个月，九月底我们正式在一起了。</div>
-              <div class="st-imgs">
-                <img class="st-img" src="images/story-together.jpg" alt="确定关系" loading="lazy">
-                <img class="st-img" src="images/story-together2.jpg" alt="在一起" loading="lazy">
-              </div>
-            </div>
-          </div>
-          <div class="st-item reveal">
-            <div class="st-dot"></div>
-            <div class="st-content">
-              <div class="st-date">2025 · 国庆</div>
-              <div class="st-title">第一次旅行</div>
-              <div class="st-desc">一起去了郑州，第一次旅行，每一步都是新鲜的风景。</div>
-              <div class="st-imgs">
-                <img class="st-img" src="images/story-travel.jpg" alt="郑州旅行" loading="lazy">
-                <img class="st-img" src="images/story-travel2.jpg" alt="旅行合照" loading="lazy">
-              </div>
-            </div>
-          </div>
-          <div class="st-item reveal">
-            <div class="st-dot"></div>
-            <div class="st-content">
-              <div class="st-date">2025 · 冬</div>
-              <div class="st-title">求婚</div>
-              <div class="st-desc">冬天的浪漫，一枚戒指，一句"嫁给我吧"，她说好。</div>
-              <img class="st-img" src="images/story-propose.jpg" alt="求婚" loading="lazy">
-            </div>
-          </div>
-          <div class="st-item reveal">
-            <div class="st-dot"></div>
-            <div class="st-content">
-              <div class="st-date">2026 · 05 · 04</div>
-              <div class="st-title">我们结婚啦</div>
-              <div class="st-desc">从相识到相守不到一年，但我们确定，这就是对的人。</div>
-            </div>
           </div>
         </div>
       </div>
