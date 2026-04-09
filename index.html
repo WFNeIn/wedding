@@ -10,7 +10,7 @@
   <!-- Open Graph -->
   <meta property="og:title" content="王峰 & 杨丽琴 · 婚礼邀请函">
   <meta property="og:description" content="我们诚挚邀请您见证爱情 — 2026年5月4日 · 武汉新城宴">
-  <meta property="og:image" content="images/DSCF7224-web.jpg">
+  <meta property="og:image" content="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7224-web.jpg">
   <meta property="og:image:width" content="1920">
   <meta property="og:image:height" content="1280">
   <meta property="og:type" content="website">
@@ -19,7 +19,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="王峰 & 杨丽琴 · 婚礼邀请函">
   <meta name="twitter:description" content="我们诚挚邀请您见证爱情 — 2026年5月4日">
-  <meta name="twitter:image" content="images/DSCF7224-web.jpg">
+  <meta name="twitter:image" content="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7224-web.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@
 
     /* ===== Hero (视差) ===== */
     .hero{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;display:flex;align-items:center}
-    .hero-bg{position:absolute;inset:-20%;background:url('images/DSCF7224-web.jpg') center 20%/cover no-repeat;filter:brightness(.55);will-change:transform}
+    .hero-bg{position:absolute;inset:-20%;background:url('https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7224-web.jpg') center 20%/cover no-repeat;filter:brightness(.55);will-change:transform}
     .hero-content{position:relative;z-index:2;padding-left:max(var(--sm), calc((100vw - var(--max-w))/2 + var(--sm)));color:#fff;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease) .2s forwards}
     .hero h1{font-family:var(--serif);font-size:clamp(40px,7vw,72px);font-weight:500;line-height:1.15;letter-spacing:.03em;margin-bottom:16px}
     .hero-sub{font-size:clamp(16px,2.5vw,22px);font-weight:300;letter-spacing:.08em;opacity:.85}
@@ -209,6 +209,20 @@
     .music-btn.playing .bar:nth-child(3){animation-delay:.4s}
     @keyframes eqBar{0%{transform:scaleY(.3)}100%{transform:scaleY(1)}}
 
+    /* ===== Poster Overlay ===== */
+    .poster-ov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s var(--ease);padding:20px}
+    .poster-ov.show{opacity:1;pointer-events:auto}
+    .poster-wrap{background:#fff;padding:16px;max-width:400px;width:100%;position:relative;transform:translateY(20px);transition:transform .4s var(--ease)}
+    .poster-ov.show .poster-wrap{transform:translateY(0)}
+    .poster-wrap canvas{display:block;width:100%;height:auto}
+    .poster-actions{display:flex;gap:12px;margin-top:12px}
+    .poster-actions button{flex:1;height:44px;font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:.08em;cursor:pointer;border:1.5px solid var(--text);transition:all .2s var(--ease)}
+    .poster-save{background:var(--text);color:#fff;border-color:var(--text)}
+    .poster-save:hover{background:transparent;color:var(--text)}
+    .poster-close-btn{background:transparent;color:var(--text)}
+    .poster-close-btn:hover{background:var(--text);color:#fff}
+    .poster-tip{font-size:12px;color:rgba(255,255,255,.7);margin-top:12px;text-align:center}
+
     /* ===== 微信安全区域适配 ===== */
     @supports(padding-bottom:env(safe-area-inset-bottom)){
       .footer{padding-bottom:calc(var(--md) + env(safe-area-inset-bottom))}
@@ -269,13 +283,13 @@
         <div class="about-grid">
           <div class="about-card reveal">
             <div class="sc-heading">他</div>
-            <img class="portrait" src="images/DSCF7337-web.jpg" alt="新郎照片" loading="lazy">
+            <img class="portrait" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7337-web.jpg" alt="新郎照片" loading="lazy">
             <h3>王峰</h3>
             <p>一个相信缘分的人，在最好的时光遇见了最对的你。愿以余生，与你共赴山海。</p>
           </div>
           <div class="about-card reveal">
             <div class="sc-heading">她</div>
-            <img class="portrait" src="images/DSCF7324-web.jpg" alt="新娘照片" loading="lazy">
+            <img class="portrait" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7324-web.jpg" alt="新娘照片" loading="lazy">
             <h3>杨丽琴</h3>
             <p>从相识到相知，从相知到相爱。感谢命运让我们相遇，从此人生不再是一个人的旅途。</p>
           </div>
@@ -311,11 +325,11 @@
             <div class="tl-event">迎宾签到 · 入座就位</div>
           </div>
           <div class="tl-item reveal">
-            <div class="tl-time">12:00</div>
+            <div class="tl-time">12:08</div>
             <div class="tl-event">婚礼仪式 · 见证幸福</div>
           </div>
           <div class="tl-item reveal">
-            <div class="tl-time">12:30</div>
+            <div class="tl-time">12:38</div>
             <div class="tl-event">喜宴开席 · 举杯同庆</div>
           </div>
         </div>
@@ -389,14 +403,27 @@
   <div class="toast" id="toast"></div>
 
   <!-- 背景音乐 -->
-  <audio id="bgm" loop preload="auto" src="images/bgm.mp3"></audio>
+  <audio id="bgm" loop preload="auto" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/bgm.mp3"></audio>
+
+  <!-- 海报生成弹窗 -->
+  <div class="poster-ov" id="posterOv">
+    <div class="poster-wrap">
+      <canvas id="posterCanvas" width="750" height="1334"></canvas>
+      <div class="poster-actions">
+        <button class="poster-save" id="posterSave">保存图片</button>
+        <button class="poster-close-btn" id="posterClose">关闭</button>
+      </div>
+    </div>
+    <div class="poster-tip">长按图片保存，或点击"保存图片"下载</div>
+  </div>
 
   <!-- 分享按钮 -->
   <button class="share-btn" id="shareBtn" aria-label="分享给朋友" title="分享">
     <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
   </button>
   <div class="share-panel" id="sharePanel">
-    <div class="sp-title">分享链接</div>
+    <div class="sp-title">分享给亲友</div>
+    <button class="sp-poster" id="genPoster" style="width:100%;height:40px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.06em;border:1.5px solid var(--text);background:var(--text);color:#fff;cursor:pointer;margin-bottom:10px;transition:all .2s">生成邀请海报</button>
     <div class="sp-link">
       <input type="text" id="shareUrl" readonly>
       <button class="sp-copy" id="copyLink">复制</button>
@@ -488,7 +515,7 @@
       if (!document.getElementById('wxShareImg')) {
         const img = document.createElement('img');
         img.id = 'wxShareImg';
-        img.src = 'images/DSCF7224-web.jpg';
+        img.src = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/DSCF7224-web.jpg';
         img.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:300px;height:300px;';
         img.alt = '';
         document.body.appendChild(img);
@@ -606,8 +633,8 @@
     });
 
     /* ===== Form Submit ===== */
-    const COS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json';
-    const COS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json';
+    const COS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=90ca1885fa65c441bd5fac493aef0c9962672315';
+    const COS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=5e95d11dfb2e926955b7b3cf50ed030ab16c1706';
 
     document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -638,8 +665,8 @@
     });
 
     /* ===== 祝福留言墙 ===== */
-    const BLESS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/blessings.json';
-    const BLESS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/blessings.json';
+    const BLESS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/blessings.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775496699%3B1778088759&q-key-time=1775496699%3B1778088759&q-header-list=host&q-url-param-list=&q-signature=4ef196e1ee716b6a1f62db0a582b3145d209cd9f';
+    const BLESS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/blessings.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775496699%3B1778088759&q-key-time=1775496699%3B1778088759&q-header-list=host&q-url-param-list=&q-signature=4e911af994435369c3705b0cc4ea815d4d0a0aaa';
 
     function escHtml(s) {
       const d = document.createElement('div');

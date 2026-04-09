@@ -88,8 +88,8 @@
         authPwd.focus();
       }
     }
-    const COS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json';
-    const COS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json';
+    const COS_GET = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=90ca1885fa65c441bd5fac493aef0c9962672315';
+    const COS_PUT = 'https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/data/rsvp.json?q-sign-algorithm=sha1&q-ak=AKIDKXaS87zjHdoncFi8OSJzSildOzQztofK&q-sign-time=1775495045%3B1778087105&q-key-time=1775495045%3B1778087105&q-header-list=host&q-url-param-list=&q-signature=5e95d11dfb2e926955b7b3cf50ed030ab16c1706';
     let rsvpData = [];
 
     async function load() {
