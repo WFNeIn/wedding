@@ -164,11 +164,11 @@
     .footer small{display:block;font-size:12px;color:var(--sec);letter-spacing:.04em}
 
     /* ===== Welcome Overlay ===== */
-    .welcome-ov{position:fixed;inset:0;z-index:500;background:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:opacity .6s var(--ease)}
+    .welcome-ov{position:fixed;inset:0;z-index:500;background:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:opacity .6s var(--ease);height:100dvh;height:100vh}
     .welcome-ov.hide{opacity:0;pointer-events:none}
-    .welcome-ov .wl-names{font-family:var(--serif);font-size:36px;font-weight:400;letter-spacing:.06em;margin-bottom:12px;opacity:0;transition:opacity .4s}
+    .welcome-ov .wl-names{font-family:var(--serif);font-size:clamp(28px,5vw,48px);font-weight:400;letter-spacing:.06em;margin-bottom:12px;opacity:0;transition:opacity .4s}
     .welcome-ov .wl-date{font-size:14px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;opacity:0;transition:opacity .4s;margin-bottom:12px}
-    .welcome-ov .wl-countdown{font-family:var(--serif);font-size:20px;font-weight:300;opacity:0;transition:opacity .4s;margin-bottom:40px}
+    .welcome-ov .wl-countdown{font-family:var(--serif);font-size:clamp(18px,3vw,24px);font-weight:300;opacity:0;transition:opacity .4s;margin-bottom:40px}
     .welcome-ov .wl-enter{font-size:13px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.4);padding:10px 32px;transition:all .3s var(--ease);animation:breathe 2.5s ease-in-out infinite;opacity:0;transition:opacity .4s}
     .welcome-ov .wl-enter:hover{border-color:#fff;background:rgba(255,255,255,.1)}
     .welcome-ov.fonts-ready .wl-names,
@@ -492,6 +492,10 @@
       wlEl.textContent = '';
     }
 
+    /* ===== 锁定欢迎页高度，防止iOS地址栏收起导致跳动 ===== */
+    const welcomeOv = document.getElementById('welcomeOv');
+    welcomeOv.style.height = window.innerHeight + 'px';
+
     /* ===== 等待字体加载完再显示欢迎页文字 ===== */
     document.fonts.ready.then(() => {
       welcomeOv.classList.add('fonts-ready');
@@ -500,7 +504,6 @@
     setTimeout(() => welcomeOv.classList.add('fonts-ready'), 2000);
 
     /* ===== 欢迎遮罩 & 自动播放音乐 ===== */
-    const welcomeOv = document.getElementById('welcomeOv');
     welcomeOv.addEventListener('click', () => {
       document.body.style.overflow = 'hidden';
       welcomeOv.classList.add('hide');
