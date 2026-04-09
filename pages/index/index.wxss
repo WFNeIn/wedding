@@ -1208,6 +1208,42 @@
   opacity: 0.95;
 }
 
+/* 分享按钮区域 */
+.share-section {
+  margin-top: 30rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2rpx solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 40rpx !important;
+  padding: 16rpx 48rpx !important;
+  color: #ffffff !important;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  backdrop-filter: blur(4px);
+}
+
+.share-btn::after {
+  border: none;
+}
+
+.share-icon {
+  font-size: 32rpx;
+}
+
+.share-text {
+  font-size: 28rpx;
+  letter-spacing: 0.04em;
+}
+
 
 /* ==================== 主题切换功能 ==================== */
 

@@ -209,6 +209,20 @@
     .music-btn.playing .bar:nth-child(3){animation-delay:.4s}
     @keyframes eqBar{0%{transform:scaleY(.3)}100%{transform:scaleY(1)}}
 
+    /* ===== Poster Overlay ===== */
+    .poster-ov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s var(--ease);padding:20px}
+    .poster-ov.show{opacity:1;pointer-events:auto}
+    .poster-wrap{background:#fff;padding:16px;max-width:400px;width:100%;position:relative;transform:translateY(20px);transition:transform .4s var(--ease)}
+    .poster-ov.show .poster-wrap{transform:translateY(0)}
+    .poster-wrap canvas{display:block;width:100%;height:auto}
+    .poster-actions{display:flex;gap:12px;margin-top:12px}
+    .poster-actions button{flex:1;height:44px;font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:.08em;cursor:pointer;border:1.5px solid var(--text);transition:all .2s var(--ease)}
+    .poster-save{background:var(--text);color:#fff;border-color:var(--text)}
+    .poster-save:hover{background:transparent;color:var(--text)}
+    .poster-close-btn{background:transparent;color:var(--text)}
+    .poster-close-btn:hover{background:var(--text);color:#fff}
+    .poster-tip{font-size:12px;color:rgba(255,255,255,.7);margin-top:12px;text-align:center}
+
     /* ===== 微信安全区域适配 ===== */
     @supports(padding-bottom:env(safe-area-inset-bottom)){
       .footer{padding-bottom:calc(var(--md) + env(safe-area-inset-bottom))}
@@ -311,11 +325,11 @@
             <div class="tl-event">迎宾签到 · 入座就位</div>
           </div>
           <div class="tl-item reveal">
-            <div class="tl-time">12:00</div>
+            <div class="tl-time">12:08</div>
             <div class="tl-event">婚礼仪式 · 见证幸福</div>
           </div>
           <div class="tl-item reveal">
-            <div class="tl-time">12:30</div>
+            <div class="tl-time">12:38</div>
             <div class="tl-event">喜宴开席 · 举杯同庆</div>
           </div>
         </div>
@@ -391,12 +405,25 @@
   <!-- 背景音乐 -->
   <audio id="bgm" loop preload="auto" src="https://wedding-invitation-1255599566.cos.ap-guangzhou.myqcloud.com/images/bgm.mp3"></audio>
 
+  <!-- 海报生成弹窗 -->
+  <div class="poster-ov" id="posterOv">
+    <div class="poster-wrap">
+      <canvas id="posterCanvas" width="750" height="1334"></canvas>
+      <div class="poster-actions">
+        <button class="poster-save" id="posterSave">保存图片</button>
+        <button class="poster-close-btn" id="posterClose">关闭</button>
+      </div>
+    </div>
+    <div class="poster-tip">长按图片保存，或点击"保存图片"下载</div>
+  </div>
+
   <!-- 分享按钮 -->
   <button class="share-btn" id="shareBtn" aria-label="分享给朋友" title="分享">
     <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
   </button>
   <div class="share-panel" id="sharePanel">
-    <div class="sp-title">分享链接</div>
+    <div class="sp-title">分享给亲友</div>
+    <button class="sp-poster" id="genPoster" style="width:100%;height:40px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.06em;border:1.5px solid var(--text);background:var(--text);color:#fff;cursor:pointer;margin-bottom:10px;transition:all .2s">生成邀请海报</button>
     <div class="sp-link">
       <input type="text" id="shareUrl" readonly>
       <button class="sp-copy" id="copyLink">复制</button>

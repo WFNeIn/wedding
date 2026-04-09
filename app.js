@@ -40,8 +40,8 @@ App({
       },
       schedule: [
         { time: '11:00', event: '迎宾' },
-        { time: '12:00', event: '仪式' },
-        { time: '12:30', event: '午宴' }
+        { time: '12:08', event: '仪式' },
+        { time: '12:38', event: '午宴' }
       ],
       contact: {
         name: '新郎',

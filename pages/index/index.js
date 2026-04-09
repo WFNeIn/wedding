@@ -245,6 +245,29 @@ Page({
   },
 
   /**
+   * 分享给朋友 - 自定义分享卡片
+   */
+  onShareAppMessage() {
+    const weddingInfo = app.globalData.weddingInfo;
+    return {
+      title: `${weddingInfo.couple.groom} & ${weddingInfo.couple.bride} 的婚礼邀请函 💒`,
+      path: '/pages/index/index',
+      imageUrl: '/images/20260223-183532.jpg'
+    };
+  },
+
+  /**
+   * 分享到朋友圈
+   */
+  onShareTimeline() {
+    const weddingInfo = app.globalData.weddingInfo;
+    return {
+      title: `诚邀您参加 ${weddingInfo.couple.groom} & ${weddingInfo.couple.bride} 的婚礼 · ${weddingInfo.date}`,
+      imageUrl: '/images/20260223-183532.jpg'
+    };
+  },
+
+  /**
    * 页面隐藏时停止倒计时
    */
   onHide() {

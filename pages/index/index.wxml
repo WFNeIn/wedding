@@ -248,6 +248,13 @@
     <view class="tips-content">
       我们诚挚地邀请您参加我们的婚礼，共同见证这一美好时刻。期待您的到来！
     </view>
+    <!-- 分享按钮 -->
+    <view class="share-section">
+      <button class="share-btn" open-type="share">
+        <text class="share-icon">📤</text>
+        <text class="share-text">转发给亲友</text>
+      </button>
+    </view>
   </view>
 
   <!-- 主题选择器弹窗（独立显示，不受showOpening影响） -->
