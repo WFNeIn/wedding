@@ -454,16 +454,8 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="qr-section">
-      <a href="https://code.coze.cn/web-sdk/7626631669742567430" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">
-        <canvas id="qrCanvas" width="120" height="120"></canvas>
-        <div class="qr-label">点击或扫码打开婚礼助手</div>
-      </a>
-    </div>
     <div class="footer-links">
-      <a href="mailto:841673885@qq.com" aria-label="发送邮件">Email</a>
-      <span style="color:var(--rule)">|</span>
-      <a href="https://code.coze.cn/web-sdk/7626631669742567430" target="_blank" rel="noopener" aria-label="打开婚礼助手">婚礼助手</a>
+      <a href="https://code.coze.cn/web-sdk/7626631669742567430" target="_blank" rel="noopener">婚礼助手</a>
     </div>
     <small>&copy; 2026 王峰 & 杨丽琴</small>
   </footer>
@@ -766,18 +758,7 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    /* ===== QR Code (轻量实现) ===== */
-    (function(){
-      const url = 'https://code.coze.cn/web-sdk/7626631669742567430';
-      const canvas = document.getElementById('qrCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      // 使用 Google Chart API 生成 QR 码图片
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => { ctx.drawImage(img, 0, 0, 120, 120); };
-      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(url) + '&margin=0';
-    })();
+    /* ===== QR Code 已移除 ===== */
   </script>
 </body>
 </html>
