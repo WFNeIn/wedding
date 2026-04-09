@@ -492,9 +492,16 @@
       wlEl.textContent = '';
     }
 
-    /* ===== 锁定欢迎页高度，防止iOS地址栏收起导致跳动 ===== */
+    /* ===== 锁定欢迎页高度，防止iOS/微信地址栏收起导致跳动 ===== */
     const welcomeOv = document.getElementById('welcomeOv');
-    welcomeOv.style.height = window.innerHeight + 'px';
+    function lockWelcomeHeight() {
+      if (welcomeOv && welcomeOv.parentNode) {
+        welcomeOv.style.height = window.innerHeight + 'px';
+      }
+    }
+    lockWelcomeHeight();
+    // 微信内加载完成后视口可能变化，持续监听直到欢迎页被移除
+    window.addEventListener('resize', lockWelcomeHeight);
 
     /* ===== 等待字体加载完再显示欢迎页文字 ===== */
     document.fonts.ready.then(() => {
@@ -512,6 +519,7 @@
       setTimeout(() => {
         welcomeOv.remove();
         document.body.style.overflow = '';
+        window.removeEventListener('resize', lockWelcomeHeight);
       }, 600);
     });
 
