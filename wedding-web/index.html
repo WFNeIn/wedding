@@ -491,10 +491,14 @@
     /* ===== 欢迎遮罩 & 自动播放音乐 ===== */
     const welcomeOv = document.getElementById('welcomeOv');
     welcomeOv.addEventListener('click', () => {
+      document.body.style.overflow = 'hidden';
       welcomeOv.classList.add('hide');
       bgm.play();
       musicBtn.classList.add('playing');
-      setTimeout(() => welcomeOv.remove(), 600);
+      setTimeout(() => {
+        welcomeOv.remove();
+        document.body.style.overflow = '';
+      }, 600);
     });
 
     // 微信内通过 WeixinJSBridge 确保音频可播放

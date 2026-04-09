@@ -13,7 +13,7 @@
     .tip { color: rgba(255,255,255,.45); font-size: 13px; margin-bottom: 16px; font-family: sans-serif; }
 
     .poster {
-      width: 420px; height: 746px;
+      width: 420px; height: 796px;
       background: #0C0C0C;
       position: relative; overflow: hidden;
       font-family: 'PingFang SC','Microsoft YaHei', sans-serif;
@@ -22,7 +22,7 @@
 
     /* 顶部婚纱照 */
     .photo-area {
-      width: 100%; height: 340px;
+      width: 100%; height: 390px;
       position: relative; overflow: hidden;
     }
     .photo-area img {
@@ -32,8 +32,10 @@
       display: block;
     }
     .photo-fade {
-      position: absolute; top: 220px; left: 0; right: 0; height: 120px;
-      background: linear-gradient(to bottom, rgba(12,12,12,0), rgba(12,12,12,1));
+      position: absolute; top: 0; left: 0; right: 0; height: 410px;
+      background: linear-gradient(to bottom, rgba(12,12,12,0) 0%, rgba(12,12,12,0) 45%, rgba(12,12,12,0.4) 65%, rgba(12,12,12,0.85) 82%, rgba(12,12,12,1) 95%);
+      z-index: 1;
+      pointer-events: none;
     }
 
     /* 内容区 */
